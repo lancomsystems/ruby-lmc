@@ -2,3 +2,7 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "lmc"
 
 require "minitest/autorun"
+
+module LMC::Tests
+
+end

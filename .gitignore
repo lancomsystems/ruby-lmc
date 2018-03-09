@@ -8,6 +8,7 @@
 /tmp/
 .idea/workspace.xml
 .idea/tasks.xml
+.idea/.rakeTasks
 Gemfile.lock
 test_credentials.yaml
 lmc-*.gem

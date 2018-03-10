@@ -1,4 +1,4 @@
-require "test_helper"
+require 'test_helper'
 require 'credentials_helper'
 
 ::LMC::Cloud.debug = true
@@ -24,7 +24,6 @@ class LmcTest < Minitest::Test
     credentials = ::LMC::Tests::CredentialsHelper.credentials.outdated_tos
     assert_raises ::LMC::OutdatedTermsOfUseException do
       cloud = ::LMC::Cloud.new(credentials.host, credentials.email, credentials.password)
-      accounts = cloud.get_accounts
     end
   end
 end

@@ -16,7 +16,7 @@ module LMC
       lmcen.auth_for_accounts([distro["id"]])
       line = line.strip.downcase
       begin
-        account = LMCAccount.get(distro["id"])
+        account = Account.get(distro["id"])
         account_authorities = account.authorities
         #puts account_authorities.inspect if @global_options[:debug]
         if @global_options[:debug]

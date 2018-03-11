@@ -1,0 +1,15 @@
+module LMC
+  class Entity
+    def self.get_by_uuid_or_name term
+      raise "Missing argument" if term.nil?
+      begin
+        return self.get_by_uuid term
+      rescue RestClient::BadRequest, URI::InvalidURIError
+        return self.get_by_name term
+
+      end
+
+    end
+
+  end
+end

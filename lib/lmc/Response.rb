@@ -10,12 +10,16 @@ module LMC
         @body_object = JSON.parse response.body
       end
       if @body_object.class == Array
-        @body = @body_object
+        @body = @body_object.map {|elem|
+          if elem.is_a? Hash then
+            OpenStruct.new(elem)
+          else
+            elem
+          end}
       elsif @body_object.class == Hash
         @body = OpenStruct.new(@body_object)
       else
-        puts "ERROR: Unknown json parse result"
-        exit 1
+        raise "Unknown json parse result"
       end
       @code = response.code
       @headers = response.headers

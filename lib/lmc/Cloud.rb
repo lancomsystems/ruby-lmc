@@ -28,6 +28,7 @@ module LMC
       @cloud_host = cloud_host
       @user = user
       @password = pass
+      @verify_tls = true
       authorize
     end
 
@@ -48,7 +49,7 @@ module LMC
       result = get ["cloud-service-auth", "accounts"]
       if result.code == 200
         accounts = result.map do |aj|
-          LMCAccount.new(aj)
+          Account.new(aj)
         end
       else
         raise "Unable to fetch accounts: #{result.body.message}"
@@ -71,11 +72,7 @@ module LMC
     def invite_user_to_account(email, account_id, type, authorities = [])
       body = {name: email, state: "ACTIVE", type: type}
       body["authorities"] = authorities
-      result = post ["cloud-service-auth", "accounts", account_id, 'members'], body
-      if result["status"] === 400
-        puts result["message"]
-      end
-      return result
+      post ["cloud-service-auth", "accounts", account_id, 'members'], body
     end
 
     def update_account(account_id, body)
@@ -99,7 +96,8 @@ module LMC
         puts "EXCEPTION: " + e.to_s if Cloud.debug
         puts "EX.response: " + e.response.to_s if Cloud.debug
         puts JSON.parse(e.response)["message"] if Cloud.debug
-        return LMCResponse.new(e.response)
+        raise e
+        #return LMCResponse.new(e.response)
       end
     end
 
@@ -199,7 +197,7 @@ module LMC
         reply = post(["cloud-service-auth", "auth"], {name: @user, password: @password, accountIds: account_ids})
         puts reply.inspect if Cloud.debug
         if reply.body['code'] == 100
-          raise LMC::OutdatedTermsOfUseException
+          #raise LMC::OutdatedTermsOfUseException
         end
         @auth_token = reply
         @auth_ok = true

@@ -58,25 +58,22 @@ module LMC
       return accounts
     end
 
-    def get_account(name, type = nil)
-      accounts = get_accounts_objects.select do |a|
-        (name.nil? || a.name == name) && (type.nil? || a.type == type)
-      end
-      if accounts.length == 1
-        return accounts[0]
-      else
-        raise "Did not specify exactly one account"
-      end
-    end
+    # functionality should be moved to Account class
+    #def get_account(name, type = nil)
+    #  accounts = get_accounts_objects.select do |a|
+    #    (name.nil? || a.name == name) && (type.nil? || a.type == type)
+    #  end
+    #  if accounts.length == 1
+    #    return accounts[0]
+    #  else
+    #    raise "Did not specify exactly one account"
+    #  end
+    #end
 
     def invite_user_to_account(email, account_id, type, authorities = [])
       body = {name: email, state: "ACTIVE", type: type}
       body["authorities"] = authorities
       post ["cloud-service-auth", "accounts", account_id, 'members'], body
-    end
-
-    def update_account(account_id, body)
-      RestClient.post build_url("cloud-service-auth", "accounts" + account_id), body.to_json, Authorization: auth_bearer, content_type: 'application/json'
     end
 
     def get(path, params = nil)
@@ -142,7 +139,7 @@ module LMC
         puts "EXCEPTION: " + e.to_s if Cloud.debug
         puts "EX.response: " + e.response.to_s if Cloud.debug
         puts JSON.parse(e.response)["message"] if Cloud.debug
-        return LMCResponse.new(e.response)
+        raise e
       end
     end
 

@@ -9,4 +9,15 @@ class LmcCloudTest < Minitest::Test
     assert_instance_of LMC::Account, accounts.first
   end
 
+  def test_backstage_infos
+    cloud = LMC::Cloud.instance
+    infos = cloud.get_backstage_serviceinfos
+  end
+
+  def test_password_hidden
+    cloud = LMC::Cloud.instance
+    infos = cloud.inspect
+    refute_match /password/, infos
+  end
+
 end

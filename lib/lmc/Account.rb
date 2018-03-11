@@ -2,17 +2,14 @@ require_relative 'account_manager.rb'
 require_relative 'entity'
 module LMC
   class Account < Entity
+    ROOT_ACCOUNT_UUID = '9ec458c2-d05f-3004-96f0-ebe73fa20de8'
     attr_accessor :name
     attr_reader :id, :state, :type
 
-    def [] key
-      self.send(key)
-    end
-
     def self.get(id)
       cloud = Cloud.instance
-      result = cloud.get ["cloud-service-auth", "accounts", id]
-      return Account.new(result)
+      result = cloud.get ["cloud-service-auth", "accounts", id.to_s]
+      return Account.new(result.body)
     end
 
     def self.get_by_uuid uuid
@@ -33,6 +30,7 @@ module LMC
         raise 'Account name not unique'
       end
     end
+
 
     def initialize(data)
       @cloud = LMC::Cloud.instance
@@ -67,7 +65,7 @@ module LMC
     def exists?
       # noch ungelöst: woran mache ich fest, ob das objekt in der DB schon da ist.
       # Bleibt wohl nix außer manuell auf @id != nil zu checken.
-      Account.get(@id)
+      @id != nil
     end
 
     def members
@@ -78,8 +76,7 @@ module LMC
         if response.code == 200
           principal = response.body
         else
-          loggerr.error "ERROR: #{response.code} #{response.body.message}"
-          principal = nil
+          raise "ERROR: #{response.code} #{response.body.message}"
         end
         puts principal.inspect if Cloud.debug
         principal
@@ -91,10 +88,10 @@ module LMC
       members.find {|m| m.name == name}
     end
 
-    def update_member(principal_id, data)
-      response = @cloud.post ["cloud-service-auth", "accounts", id, 'members', principal_id], data
-      return response
-    end
+    #def update_member(principal_id, data)
+    #  response = @cloud.post ["cloud-service-auth", "accounts", id, 'members', principal_id], data
+    #  return response
+    #end
 
     def remove_membership(member_id)
       response = @cloud.delete ["cloud-service-auth", "accounts", id, "members", member_id]
@@ -104,29 +101,26 @@ module LMC
       response = @cloud.delete ["cloud-service-auth", "accounts", id, "members", "self"]
     end
 
-    def children
-      response = @cloud.get ["cloud-service-auth", "accounts", id, "children"], {"parent.id" => id}
-      response.body
-    end
-
-    def children_for_account_id(accountid)
-      response = @cloud.get ["cloud-service-auth", "accounts", id, "children"], {"parent.id" => accountid}
-    end
-
     def authorities
-      response = @cloud.get ["cloud-service-auth", "accounts", id, 'authorities']
+      response = @cloud.get ['cloud-service-auth', 'accounts', id, 'authorities']
       if response.code == 200
         return response.body
       else
-        raise "Unable to get authorities"
+        raise 'Unable to get authorities'
       end
+    end
+
+    def children
+      @cloud.auth_for_account self
+      response = @cloud.get ['cloud-service-auth', 'accounts', id, 'children']
+      response.map {|child| Account.new child}
     end
 
     def logs
       # https://lmctest/cloud-service-logging/accounts/6392b234-b11c-498a-a077-a5f5b23c54a0/logs?lang=DE
       cloud = Cloud.instance
       cloud.auth_for_accounts [id]
-      cloud.get ["cloud-service-logging", "accounts", id, "logs?lang=DE"]
+      cloud.get(["cloud-service-logging", "accounts", id, "logs?lang=DE"]).body
     end
 
     def sites

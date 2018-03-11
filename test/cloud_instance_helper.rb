@@ -7,11 +7,11 @@ module LMC::Tests
     LMC::Cloud.password = ok_credentials.password
     #LMC::Cloud.debug = true
 
-    def self.using_credentials credentials_name
-      credentials = LMC::Tests::CredentialsHelper.credentials.ok
-      cloud = ::LMC::Cloud.new(credentials.host, credentials.email, credentials.password)
-      return cloud
-    end
+    #def self.using_credentials credentials_name
+    #  credentials = LMC::Tests::CredentialsHelper.credentials.ok
+    #  cloud = ::LMC::Cloud.new(credentials.host, credentials.email, credentials.password)
+    #  return cloud
+    #end
 
   end
 end

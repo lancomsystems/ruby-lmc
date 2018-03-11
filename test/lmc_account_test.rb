@@ -1,19 +1,20 @@
 require 'test_helper'
 class LmcAccountTest < ::Minitest::Test
   TEST_ORGA = 'ruby-lmc'
-
+  TEST_ACCOUNT_NOT_OWNED = 'permanent_test_not_owned'
+  TEST_ACCOUNT_NON_UNIQUE = 'permanent_test_non_unique'
 
   RENAME_ACCOUNT_NAME = 'prerename'
   RENAME_NEW_NAME = "postrename"
 
   def setup
-    parent = LMC::Account.get_by_name TEST_ORGA
-    @rename_account = LMC::Account.new({'parent' => parent.id, 'type' => 'PROJECT', 'name' => RENAME_ACCOUNT_NAME})
-    @rename_account.save
+    @orga = LMC::Account.get_by_name TEST_ORGA
   end
 
   def teardown
-    @rename_account.delete
+    LMC::Cloud.instance.get_accounts_objects.select {|a| [RENAME_NEW_NAME, RENAME_ACCOUNT_NAME].include? a.name}.each do |a|
+      a.delete
+    end
   end
 
   def test_getting_account_by_id
@@ -22,6 +23,7 @@ class LmcAccountTest < ::Minitest::Test
     account = LMC::Account.get_by_uuid account_from_list.id
     assert_instance_of LMC::Account, account
     assert account_from_list.id == account.id
+    assert_equal account_from_list.name, account.name
   end
 
   def test_getting_account_by_name
@@ -60,6 +62,20 @@ class LmcAccountTest < ::Minitest::Test
     rescue RuntimeError => e
       assert_equal "Did not find account", e.message
     end
+  end
+
+  def test_getting_account_by_non_unique_name
+    exception = assert_raises RuntimeError do
+      no_account = LMC::Account.get_by_uuid_or_name TEST_ACCOUNT_NON_UNIQUE
+    end
+    assert_equal 'Account name not unique', exception.message
+  end
+
+  def test_account_exists
+    good = LMC::Account.get_by_name TEST_ORGA
+    bad = LMC::Account.new({name: 'foobar'})
+    assert good.exists?
+    refute bad.exists?
   end
 
   def test_getting_account_missing_argument
@@ -107,7 +123,17 @@ class LmcAccountTest < ::Minitest::Test
     assert_match /Did not find account/, check_deleted.message, "Account #{account} not deleted."
   end
 
+  def test_delete_failure
+    account = LMC::Account.get_by_name TEST_ACCOUNT_NOT_OWNED
+    error = assert_raises RuntimeError do
+      account.delete
+    end
+    assert_match /unable to delete account/, error.message
+  end
+
   def test_account_renaming
+    @rename_account = LMC::Account.new({'parent' => @orga.id, 'type' => 'PROJECT', 'name' => RENAME_ACCOUNT_NAME})
+    @rename_account.save
     pre = LMC::Account.get_by_name RENAME_ACCOUNT_NAME
     pre.name = RENAME_NEW_NAME
     pre.save
@@ -117,8 +143,22 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_account_members
     account = LMC::Account.get_by_name TEST_ORGA
+    member = account.find_member_by_name LMC::Tests::CredentialsHelper.credentials.ok.email
     members = account.members
+    refute_nil member
     refute_empty members
+  end
+
+  def test_account_children
+    orga = LMC::Account.get_by_name TEST_ORGA
+    children = orga.children
+    refute_empty children
+    assert_instance_of LMC::Account, children.first
+  end
+
+  def test_account_logs
+    logs = @orga.logs
+    refute_empty logs
   end
 
 end

@@ -6,9 +6,11 @@ module LMC
         return self.get_by_uuid term
       rescue RestClient::BadRequest, URI::InvalidURIError
         return self.get_by_name term
-
       end
+    end
 
+    def [] key
+      self.send(key)
     end
 
   end

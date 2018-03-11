@@ -1,5 +1,4 @@
 require 'base64'
-require 'bundler'
 require 'json'
 require 'restclient'
 module LMC

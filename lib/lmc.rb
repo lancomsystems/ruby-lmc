@@ -1,4 +1,5 @@
-require 'bundler'
+require 'json'
+require 'restclient'
 
 Dir.glob(File.expand_path("../lmc/*.rb", __FILE__)).each do |file|
   require file

@@ -9,6 +9,7 @@ module LMC
       attr_writer :cloud_host, :user, :password
       attr_accessor :verbose, :debug, :verify_tls, :use_tls
       Cloud.use_tls = true
+      Cloud.verify_tls = true
     end
 
     # def self.cloud_host=(cloud_host)
@@ -27,7 +28,7 @@ module LMC
       @cloud_host = cloud_host
       @user = user
       @password = pass
-      @verify_tls = true
+      @verify_tls = Cloud.verify_tls
       authorize
     end
 

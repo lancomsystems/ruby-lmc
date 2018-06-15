@@ -18,6 +18,8 @@ module LMC
           end}
       elsif @body_object.class == Hash
         @body = OpenStruct.new(@body_object)
+      elsif @body_object.class == TrueClass || @body_object.class == FalseClass
+        @body = @body_object
       else
         raise "Unknown json parse result"
       end

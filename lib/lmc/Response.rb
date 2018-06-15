@@ -44,6 +44,10 @@ module LMC
     def to_s
       "Response: Code: #{@code}, Body: #{@body_object.to_s}"
     end
+
+    def empty?
+        @body_object.empty?
+    end
   end
 
 end

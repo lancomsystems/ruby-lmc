@@ -41,4 +41,14 @@ class LmcResponseTest < Minitest::Test
     response = LMC::LMCResponse.new array_mock
     assert_equal "Response: Code: 200, Body: #{[1, 2].to_s}", response.to_s
   end
+
+  def test_response_boolean
+    response_mock = Minitest::Mock.new
+    response_mock.expect :bytesize, 4
+    response_mock.expect :body, "true"
+    response_mock.expect :code, 200
+    response_mock.expect :headers, []
+    response = LMC::LMCResponse.new response_mock
+    assert response.body
+  end
 end

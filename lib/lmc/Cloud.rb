@@ -131,9 +131,6 @@ module LMC
         }
         args.merge!(rest_options)
         resp = RestClient::Request.execute args
-        #if resp.bytesize == 0
-        #  return {}
-        #end
         return LMCResponse.new(resp)
       rescue RestClient::ExceptionWithResponse => e
         puts "EXCEPTION: " + e.to_s if Cloud.debug

@@ -1,11 +1,28 @@
 module LMC
   class User
+    class Contact < OpenStruct
+
+    end
+    class TermOfUse
+        attr_accessor :name, :acceptance
+
+        def self.getAll
+            result = Cloud.instance.get ['cloud-service-auth', 'terms-of-use']
+            result.inspect
+            "foo"
+        end
+    end
+
     #todo: look into hiding password
     attr_reader :email
+    attr_accessor :contact, :termsOfUse
 
     def initialize(data)
       @email = data["email"]
+      @id = data["id"]
       @password = data["password"]
+      @contact = Contact.new data['contact']
+
     end
 
     # current registration process unclear and likely to have changed
@@ -35,6 +52,13 @@ module LMC
       cloud.post ["cloud-service-auth", "actions"], post_data
     end
 
+    def register(action_id)
+        cloud = Cloud.instance
+        action = AuthAction.get(action_id)
+        # curl 'https://beta.cloud.lancom.de/cloud-service-auth/terms-of-use?language=de' 
+        # POST https://beta.cloud.lancom.de/cloud-service-auth/users
+        # curl 'https://beta.cloud.lancom.de/cloud-service-auth/users' --data-binary $'{"email":"apireverse@","token":"2615899fdb933e99fb155216f7","contact":{"gender":"MALE","firstName":"vor","lastName":"nach"},"password":"","passwordRepeat":"","termsOfUse":[{"name":"general","acceptance":"2017-10-10"}]}'
+    end
   end
-
+  
 end

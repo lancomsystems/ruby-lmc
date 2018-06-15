@@ -1,5 +1,7 @@
 require 'simplecov' # These two lines must go first
-SimpleCov.start
+SimpleCov.start do
+    refuse_coverage_drop
+end
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require "lmc"

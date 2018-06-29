@@ -124,6 +124,8 @@ module LMC
     end
 
     def sites
+      # private clouds can not have sites
+      return [] if @type == "PRIVATE_CLOUD"
       @cloud.auth_for_accounts([id])
       response = @cloud.get ["cloud-service-devices", "accounts", id, "sites"]
       if response.code == 200
@@ -155,6 +157,8 @@ module LMC
     end
 
     private
+
+    ## should be put into entity or such
     def path
       ["cloud-service-auth", "accounts", @id].join("/")
     end

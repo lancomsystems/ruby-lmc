@@ -1,6 +1,8 @@
 require 'base64'
 require 'json'
 require 'restclient'
+require 'pry-nav'
+
 module LMC
   class Cloud
     #include ActionView::Helpers::DateHelper
@@ -16,20 +18,20 @@ module LMC
     #     @@cloud_host = cloud_host
     # end
 
-    def self.instance
-      @@inst ||= self.new(@cloud_host, @user, @password)
+    def self.instance(opts = {authorize: true})
+      @@inst ||= self.new(@cloud_host, @user, @password, opts[:authorize])
     end
 
 
     attr_reader :auth_ok, :cloud_host
 
-    def initialize(cloud_host, user, pass)
+    def initialize(cloud_host, user, pass, auth=true)
       @auth_ok = false
       @cloud_host = cloud_host
       @user = user
       @password = pass
       @verify_tls = Cloud.verify_tls
-      authorize
+      authorize if auth
     end
 
     # hide password from dumps
@@ -184,22 +186,23 @@ module LMC
       auth_for_accounts([account.id])
     end
 
+    def accept_tos(tos)
+        authorize([], tos)
+    end
+
 
     private
-    def authorize(account_ids = [])
+    def authorize(account_ids = [], tos = [])
       begin
-        reply = post(["cloud-service-auth", "auth"], {name: @user, password: @password, accountIds: account_ids})
-        puts reply.inspect if Cloud.debug
-        if reply.body['code'] == 100
-          #raise LMC::OutdatedTermsOfUseException
-        end
+        reply = post(["cloud-service-auth", "auth"], {name: @user, password: @password, accountIds: account_ids, termsOfUse: tos})
+        puts "authorize reply " + reply.inspect if Cloud.debug
         @auth_token = reply
         @auth_ok = true
       rescue ::RestClient::ExceptionWithResponse => e
-        puts e.to_s
-        puts e.response.to_s
-        puts JSON.parse(e.response)["message"]
-        JSON.parse e.response
+        response = JSON.parse(e.response.body)
+        if response['code'] == 100
+            raise LMC::OutdatedTermsOfUseException.new(response)
+        end
       end
     end
 

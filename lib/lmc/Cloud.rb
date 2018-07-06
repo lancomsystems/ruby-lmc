@@ -1,10 +1,6 @@
 require 'base64'
 require 'json'
 require 'restclient'
-begin
-  require 'pry-nav'
-rescue
-end
 
 module LMC
   class Cloud

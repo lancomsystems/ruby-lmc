@@ -22,7 +22,6 @@ class LmcTosTest < Minitest::Test
       begin
         c.auth_for_accounts []
       rescue LMC::OutdatedTermsOfUseException => e
-        puts e.response
         assert_equal "Terms of use must be accepted before using this LMC instance:\nName: organization, Date 2018-06-25\n",  e.response
         assert_equal 1, e.missing.size
 

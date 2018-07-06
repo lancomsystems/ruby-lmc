@@ -4,6 +4,7 @@ class LmcAccountInviteTest < Minitest::Test
   TEST_EMAIL = LMC::Tests::CredentialsHelper.credentials.ok.invite_test_address
 
   def setup
+    @new_orga_member_id = nil
     @orga = LMC::Account.get_by_name TEST_ORGA
     @project = LMC::Account.new({'parent' => @orga.id, 'name' => 'inviteproject', 'type' => 'PROJECT'}).save
 

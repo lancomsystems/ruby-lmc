@@ -32,9 +32,9 @@ class LmcUserTest < Minitest::Test
     assert_equal @@credentials.email, user.email
     LMC::Cloud.stub :instance, @@changecloud do
       ex = assert_raises RuntimeError do
-        result = user.update @@credentials.password
+        user.update @@credentials.password
       end
-      assert_match /400 Bad Request.*/, ex.message
+      assert_match(/400 Bad Request.*/, ex.message)
     end
   end
 

@@ -94,11 +94,11 @@ module LMC
     #end
 
     def remove_membership(member_id)
-      response = @cloud.delete ["cloud-service-auth", "accounts", id, "members", member_id]
+      @cloud.delete ["cloud-service-auth", "accounts", id, "members", member_id]
     end
 
     def remove_membership_self
-      response = @cloud.delete ["cloud-service-auth", "accounts", id, "members", "self"]
+      @cloud.delete ["cloud-service-auth", "accounts", id, "members", "self"]
     end
 
     def authorities

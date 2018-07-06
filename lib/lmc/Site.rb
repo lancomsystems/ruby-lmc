@@ -31,6 +31,7 @@ module LMC
     def configstates
       response = @cloud.get ["cloud-service-config", "configsubnetgroup", "accounts", @account.id, "subnetgroups", @subnet_group_id, "updatestates"]
       states = LMC::Configstates.new response.body
+      return states
     end
   end
 

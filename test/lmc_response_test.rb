@@ -17,7 +17,7 @@ class LmcResponseTest < Minitest::Test
     err = assert_raises RuntimeError do
       LMC::LMCResponse.new(bad_mock)
     end
-    assert_match /Unknown json parse result/, err.message
+    assert_match(/Unknown json parse result/, err.message)
   end
 
   def test_response_each

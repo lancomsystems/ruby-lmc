@@ -39,6 +39,7 @@ module LMC
         data["account"] = account
         LMC::Device.new(data)
       end
+      return devices
     end
 
     def self.get_for_account_id(account_id)

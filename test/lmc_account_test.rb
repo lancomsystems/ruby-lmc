@@ -47,7 +47,7 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_getting_account_by_invalid_uuid
     assert_raises RestClient::Forbidden do
-      nonexistant_account = LMC::Account.get_by_uuid_or_name '00000000-0000-0000-96BD-5F97BE22D5F6'
+      LMC::Account.get_by_uuid_or_name '00000000-0000-0000-96BD-5F97BE22D5F6'
     end
   end
 
@@ -66,7 +66,7 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_getting_account_by_non_unique_name
     exception = assert_raises RuntimeError do
-      no_account = LMC::Account.get_by_uuid_or_name TEST_ACCOUNT_NON_UNIQUE
+      LMC::Account.get_by_uuid_or_name TEST_ACCOUNT_NON_UNIQUE
     end
     assert_equal 'Account name not unique', exception.message
   end
@@ -82,15 +82,15 @@ class LmcAccountTest < ::Minitest::Test
     err = assert_raises RuntimeError do
       LMC::Account.get_by_uuid_or_name nil
     end
-    assert_match /Missing argument/, err.message
+    assert_match(/Missing argument/, err.message)
     err = assert_raises RuntimeError do
       LMC::Account.get_by_uuid nil
     end
-    assert_match /Missing argument/, err.message
+    assert_match(/Missing argument/, err.message)
     err = assert_raises RuntimeError do
       LMC::Account.get_by_name nil
     end
-    assert_match /Missing argument/, err.message
+    assert_match(/Missing argument/, err.message)
   end
 
   def test_creating_a_project
@@ -120,7 +120,7 @@ class LmcAccountTest < ::Minitest::Test
     check_deleted = assert_raises RuntimeError, "Account #{account} not deleted" do
       LMC::Account.get_by_name unique_name
     end
-    assert_match /Did not find account/, check_deleted.message, "Account #{account} not deleted."
+    assert_match(/Did not find account/, check_deleted.message, "Account #{account} not deleted.")
   end
 
   def test_delete_failure
@@ -128,7 +128,7 @@ class LmcAccountTest < ::Minitest::Test
     error = assert_raises RuntimeError do
       account.delete
     end
-    assert_match /unable to delete account/, error.message
+    assert_match(/unable to delete account/, error.message)
   end
 
   def test_account_renaming

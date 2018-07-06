@@ -14,7 +14,7 @@ class LMC::Tests::LmcTest < Minitest::Test
   def test_that_it_connects
     credentials = ::LMC::Tests::CredentialsHelper.credentials.ok
     cloud = ::LMC::Cloud.new(credentials.host, credentials.email, credentials.password)
-    accounts = cloud.get_accounts
+    cloud.get_accounts
     assert true
   end
 

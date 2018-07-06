@@ -1,8 +1,8 @@
 module LMC
   class AccountManager
-    @options
-    @global_options
-    @errors
+    #@options
+    #@global_options
+    #@errors
     attr_reader :errors
 
     def initialize(options, global_options)

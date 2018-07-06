@@ -12,12 +12,24 @@ class LmcCloudTest < Minitest::Test
   def test_backstage_infos
     cloud = LMC::Cloud.instance
     infos = cloud.get_backstage_serviceinfos
+    refute_empty infos
   end
 
   def test_password_hidden
     cloud = LMC::Cloud.instance
     infos = cloud.inspect
-    refute_match /password/, infos
+    refute_match(/password/, infos)
+  end
+
+  def test_put
+    fake_execute = lambda {|r|
+      return OpenStruct.new({:bytesize => 0})
+    }
+    c = LMC::Cloud.instance
+    ::RestClient::Request.stub :execute, fake_execute do
+      response = c.put ["service", "test"], {"this" => "body"}
+      assert_kind_of(LMC::LMCResponse, response)
+    end
   end
 
 end

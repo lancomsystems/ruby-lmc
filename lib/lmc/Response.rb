@@ -34,11 +34,11 @@ module LMC
     end
 
     def map(&block)
-      @body_object.map &block
+      @body_object.map(&block)
     end
 
     def each(&block)
-      @body_object.each &block
+      @body_object.each(&block)
     end
 
     def to_s

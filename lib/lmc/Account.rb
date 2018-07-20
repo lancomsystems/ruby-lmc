@@ -4,7 +4,7 @@ module LMC
   class Account < Entity
     ROOT_ACCOUNT_UUID = '9ec458c2-d05f-3004-96f0-ebe73fa20de8'
     attr_accessor :name
-    attr_reader :id, :state, :type
+    attr_reader :id, :state, :type, :identifier
 
     def self.get(id)
       cloud = Cloud.instance
@@ -169,6 +169,7 @@ module LMC
       @name = data["name"]
       @state = data["state"]
       @type = data["type"]
+      @identifier = data["identifier"]
     end
 
   end

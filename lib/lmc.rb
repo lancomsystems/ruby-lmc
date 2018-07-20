@@ -10,6 +10,12 @@ Dir.glob(File.expand_path("../lmc/exceptions/*.rb", __FILE__)).each do |file|
 end
 
 module LMC
+  SERVICELIST = ['cloud-service-auth',
+                 'cloud-service-devices',
+                 'cloud-service-monitoring',
+                 'cloud-service-config',
+                 'cloud-service-licenses']
+
   def self.useful
     return true
   end

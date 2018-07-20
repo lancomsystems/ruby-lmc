@@ -12,7 +12,7 @@ class LmcAccountInviteTest < Minitest::Test
   end
 
   def teardown
-    @project.delete
+    @project.delete!
     @orga.remove_membership @new_orga_member_id if @new_orga_member_id
   end
 

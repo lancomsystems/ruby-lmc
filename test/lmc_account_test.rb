@@ -13,7 +13,7 @@ class LmcAccountTest < ::Minitest::Test
 
   def teardown
     LMC::Cloud.instance.get_accounts_objects.select {|a| [RENAME_NEW_NAME, RENAME_ACCOUNT_NAME].include? a.name}.each do |a|
-      a.delete
+      a.delete!
     end
   end
 
@@ -116,7 +116,7 @@ class LmcAccountTest < ::Minitest::Test
                                 "type" => 'PROJECT',
                                 "parent" => orga.id})
     account.save
-    assert account.delete
+    assert account.delete!
     check_deleted = assert_raises RuntimeError, "Account #{account} not deleted" do
       LMC::Account.get_by_name unique_name
     end
@@ -126,7 +126,7 @@ class LmcAccountTest < ::Minitest::Test
   def test_delete_failure
     account = LMC::Account.get_by_name TEST_ACCOUNT_NOT_OWNED
     error = assert_raises RuntimeError do
-      account.delete
+      account.delete!
     end
     assert_match(/unable to delete account/, error.message)
   end

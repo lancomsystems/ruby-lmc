@@ -49,7 +49,7 @@ module LMC
       return self
     end
 
-    def delete
+    def delete!
       if @id != nil
         @cloud.auth_for_accounts [@id]
         deleted = @cloud.delete ["cloud-service-auth", "accounts", @id]

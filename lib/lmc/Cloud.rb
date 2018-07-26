@@ -24,7 +24,7 @@ module LMC
 
     attr_reader :auth_ok, :cloud_host
 
-    def initialize(cloud_host, user, pass, auth=true)
+    def initialize(cloud_host, user, pass, auth = true)
       @auth_ok = false
       @cloud_host = cloud_host
       @user = user
@@ -186,21 +186,25 @@ module LMC
     end
 
     def accept_tos(tos)
-        authorize([], tos)
+      authorize([], tos)
     end
 
 
     private
+
     def authorize(account_ids = [], tos = [])
-      begin
-        reply = post(["cloud-service-auth", "auth"], {name: @user, password: @password, accountIds: account_ids, termsOfUse: tos})
-        puts "authorize reply " + reply.inspect if Cloud.debug
-        @auth_token = reply
-        @auth_ok = true
-      rescue ::RestClient::ExceptionWithResponse => e
-        response = JSON.parse(e.response.body)
-        if response['code'] == 100
+      if account_ids != @last_authorized_account_ids
+        begin
+          reply = post(["cloud-service-auth", "auth"], {name: @user, password: @password, accountIds: account_ids, termsOfUse: tos})
+          puts "authorize reply " + reply.inspect if Cloud.debug
+          @last_authorized_account_ids = account_ids
+          @auth_token = reply
+          @auth_ok = true
+        rescue ::RestClient::ExceptionWithResponse => e
+          response = JSON.parse(e.response.body)
+          if response['code'] == 100
             raise LMC::OutdatedTermsOfUseException.new(response)
+          end
         end
       end
     end

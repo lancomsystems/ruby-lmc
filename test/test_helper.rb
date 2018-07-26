@@ -6,6 +6,7 @@ if ARGV.grep(/_test\.rb/).count > 1
   end
 end
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require 'securerandom'
 
 require "lmc"
 module LMC::Tests

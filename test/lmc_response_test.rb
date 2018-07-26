@@ -6,8 +6,8 @@ class LmcResponseTest < Minitest::Test
     good_mock.expect :body, '{}'
     good_mock.expect :code, 200
     good_mock.expect :headers, []
-
     LMC::LMCResponse.new(good_mock)
+
     bad_mock = Minitest::Mock.new
     bad_mock.expect :bytesize, 2
     bad_mock.expect :body, '""'

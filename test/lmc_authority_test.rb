@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'securerandom'
 class LmcAuthorityTest < ::Minitest::Test
   def test_authority_aux
     account = LMC::Account.new({"id" => SecureRandom.uuid})
@@ -15,7 +14,6 @@ class LmcAuthorityTest < ::Minitest::Test
         {"name" => "ein name", "type" => "CUSTOM", "visibility" => "PUBLIC"}, account)
 
     fake_get = lambda {|r|
-      puts r
       return OpenStruct.new({:body => "FAAKE"})
     }
     c = LMC::Cloud.instance

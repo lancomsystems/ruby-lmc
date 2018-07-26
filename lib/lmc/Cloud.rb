@@ -30,6 +30,7 @@ module LMC
       @user = user
       @password = pass
       @verify_tls = Cloud.verify_tls
+      #@last_authorized_account_ids = []
       authorize if auth
     end
 

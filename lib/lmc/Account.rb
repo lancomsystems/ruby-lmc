@@ -111,11 +111,11 @@ module LMC
 
     def authorities
       response = @cloud.get ['cloud-service-auth', 'accounts', id, 'authorities']
-      if response.code == 200
-        return response.body
-      else
-        raise 'Unable to get authorities'
+      raise 'Unable to get authorities' unless response.code == 200
+      authorities = response.body.map do |r|
+        Authority.new r, self
       end
+      return authorities
     end
 
     def children

@@ -3,6 +3,7 @@ require 'simplecov' # These two lines must go first
 if ARGV.grep(/_test\.rb/).count > 1
   SimpleCov.start do
     refuse_coverage_drop
+    add_filter "/test/"
   end
 end
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)

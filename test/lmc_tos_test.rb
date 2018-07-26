@@ -30,14 +30,14 @@ class LmcTosTest < Minitest::Test
     end
   end
 
-  #def test_accept_tos
-  #  tos_hash = {"name" => "GENERAL", "acceptance" => "2000-01-01"}
-  #  mock = Minitest::Mock.new
-  #  mock.expect :call, nil, [[], [tos_hash]]
-  #  LMC::Cloud.instance.stub :authorize, mock do
-  #    LMC::Cloud.instance.accept_tos([tos_hash])
-  #  end
-  #end
+  def test_accept_tos
+    tos_hash = {"name" => "GENERAL", "acceptance" => "2000-01-01"}
+    mock = Minitest::Mock.new
+    mock.expect :call, nil, [[], [tos_hash]]
+    LMC::Cloud.instance.stub :authorize, mock do
+      LMC::Cloud.instance.accept_tos([tos_hash])
+    end
+  end
 
 
 end

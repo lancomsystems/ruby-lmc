@@ -31,6 +31,14 @@ module LMC
       end
     end
 
+    def self.get_children_from_root account
+      cloud = Cloud.instance
+      cloud.auth_for_accounts [ROOT_ACCOUNT_UUID]
+      response = cloud.get ['cloud-service-auth', 'accounts', account.id, 'children'],
+                           {"parent.id" => account.id}
+      response.map {|child| Account.new child}
+    end
+
 
     def initialize(data)
       @cloud = LMC::Cloud.instance
@@ -115,6 +123,7 @@ module LMC
       response = @cloud.get ['cloud-service-auth', 'accounts', id, 'children']
       response.map {|child| Account.new child}
     end
+
 
     def logs
       # https://lmctest/cloud-service-logging/accounts/6392b234-b11c-498a-a077-a5f5b23c54a0/logs?lang=DE

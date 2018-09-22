@@ -128,7 +128,7 @@ class LmcAccountTest < ::Minitest::Test
     error = assert_raises RuntimeError do
       account.delete!
     end
-    assert_match(/unable to delete account/, error.message)
+    assert_match(/403 Forbidden/, error.message)
   end
 
   def test_account_renaming

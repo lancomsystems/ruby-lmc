@@ -7,8 +7,7 @@ module LMC
     #include ActionView::Helpers::DateHelper
 
     class << self
-      attr_writer :cloud_host, :user, :password
-      attr_accessor :verbose, :debug, :verify_tls, :use_tls
+      attr_accessor :cloud_host, :user, :password, :verbose, :debug, :verify_tls, :use_tls
       Cloud.use_tls = true
       Cloud.verify_tls = true
     end
@@ -30,7 +29,7 @@ module LMC
       @user = user
       @password = pass
       @verify_tls = Cloud.verify_tls
-      #@last_authorized_account_ids = []
+      @last_authorized_account_ids = nil
       authorize if auth
     end
 

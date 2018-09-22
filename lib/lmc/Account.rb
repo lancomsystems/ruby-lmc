@@ -60,7 +60,12 @@ module LMC
     def delete!
       if @id != nil
         @cloud.auth_for_accounts [@id]
-        deleted = @cloud.delete ["cloud-service-auth", "accounts", @id]
+        delete_action = AuthAction.new @cloud
+        delete_action.type = AuthAction::ACCOUNT_DELETE
+        delete_action.name = Cloud.user
+        delete_action.data = {'password' => Cloud.password,
+                              'accountId' => @id}
+        deleted = delete_action.post
         if deleted.code == 200
           @id = nil
           return true

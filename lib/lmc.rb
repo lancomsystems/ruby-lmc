@@ -5,7 +5,7 @@ Dir.glob(File.expand_path("../lmc/*.rb", __FILE__)).each do |file|
   require file
 end
 
-Dir.glob(File.expand_path("../lmc/exceptions/*.rb", __FILE__)).each do |file|
+Dir.glob(File.expand_path("../lmc/**/*.rb", __FILE__)).each do |file|
   require file
 end
 

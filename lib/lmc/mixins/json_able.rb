@@ -1,4 +1,4 @@
-module LMC::JSONable
+module LMC::JSONAble
   def self.included(klass)
     klass.class_exec do
       def to_json

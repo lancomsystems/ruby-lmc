@@ -1,7 +1,7 @@
 module LMC
   class AuthAction
     include ServiceResource
-    include JSONable
+    include JSONAble
     resource_attrs :name, :type, :data
     # action types
     ACCOUNT_INVITE = 'ACCOUNT_INVITE'

@@ -29,10 +29,10 @@ module LMC
     end
 
     def request_pw_reset
-      #https://beta.cloud.lancom.de/cloud-service-auth/actions
-      cloud = Cloud.instance
-      post_data = {"type" => "PASSWORD_RESET", "name" => @email}
-      cloud.post ["cloud-service-auth", "actions"], post_data
+      action = AuthAction.new Cloud.instance
+      action.type="PASSWORD_RESET"
+      action.name=@email
+      action.post
     end
 
   end

@@ -40,4 +40,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
     lmc_url: https://my.lmc.example
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/lmc.
+Bug reports and pull requests are welcome on GitHub at https://github.com/lancomsystems/ruby-lmc.

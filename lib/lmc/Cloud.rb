@@ -19,8 +19,6 @@ module LMC
     def self.instance(opts = {authorize: true})
       @@inst ||= self.new(@cloud_host, @user, @password, opts[:authorize])
     end
-
-
     attr_reader :auth_ok, :cloud_host, :user, :password
 
     def initialize(cloud_host, user, pass, auth = true)
@@ -30,6 +28,9 @@ module LMC
       @password = pass
       @verify_tls = Cloud.verify_tls
       @last_authorized_account_ids = nil
+      @logger ||= ::LMC::Logger.new(STDOUT) if Cloud.debug
+      @logger.cloud = self if Cloud.debug
+      RestClient.log = @logger if Cloud.debug
       authorize if auth
     end
 
@@ -121,24 +122,12 @@ module LMC
     end
 
     def post(path, body_object)
-      RestClient.log = Logger.new(STDOUT, self) if Cloud.debug
-      begin
-        args = {
-            :method => :post,
-            :url => build_url(path),
-            :payload => body_object.to_json,
-            :headers => headers
-
-        }
-        args.merge!(rest_options)
-        resp = RestClient::Request.execute args
-        return LMCResponse.new(resp)
-      rescue RestClient::ExceptionWithResponse => e
-        puts "EXCEPTION: " + e.to_s if Cloud.debug
-        puts "EX.response: " + e.response.to_s if Cloud.debug
-        puts JSON.parse(e.response)["message"] if Cloud.debug
-        raise e
-      end
+      args = {
+          :method => :post,
+          :url => build_url(path),
+          :payload => body_object.to_json,
+      }
+      execute_request args
     end
 
     def delete(path, body_object = nil)
@@ -227,8 +216,26 @@ module LMC
       if !@verify_tls
         options[:verify_ssl] = false
       end
-      return options
+      options
+    end
+
+    def execute_request(args)
+      internal_args = { headers: headers }
+      internal_args.merge! rest_options
+      internal_args.merge! args
+      begin
+        resp = RestClient::Request.execute internal_args
+        return LMCResponse.new(resp)
+      rescue RestClient::ExceptionWithResponse => e
+        print_exception e if Cloud.debug
+        raise e
+      end
+    end
+
+    def print_exception(execption)
+      puts 'EXCEPTION: ' + execption.to_s
+      puts 'EX.response: ' + execption.response.to_s
+      puts JSON.parse(execption.response)['message']
     end
   end
-
 end

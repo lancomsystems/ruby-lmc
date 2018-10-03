@@ -21,7 +21,7 @@ module LMC
     end
 
 
-    attr_reader :auth_ok, :cloud_host
+    attr_reader :auth_ok, :cloud_host, :user, :password
 
     def initialize(cloud_host, user, pass, auth = true)
       @auth_ok = false
@@ -121,7 +121,7 @@ module LMC
     end
 
     def post(path, body_object)
-      RestClient.log = ("stdout") if Cloud.debug
+      RestClient.log = Logger.new(STDOUT, self) if Cloud.debug
       begin
         args = {
             :method => :post,

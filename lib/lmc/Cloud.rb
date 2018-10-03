@@ -1,20 +1,16 @@
+# frozen_string_literal: true
+
 require 'base64'
 require 'json'
 require 'restclient'
 
 module LMC
   class Cloud
-    #include ActionView::Helpers::DateHelper
-
     class << self
       attr_accessor :cloud_host, :user, :password, :verbose, :debug, :verify_tls, :use_tls
       Cloud.use_tls = true
       Cloud.verify_tls = true
     end
-
-    # def self.cloud_host=(cloud_host)
-    #     @@cloud_host = cloud_host
-    # end
 
     def self.instance(opts = {authorize: true})
       @@inst ||= self.new(@cloud_host, @user, @password, opts[:authorize])
@@ -40,15 +36,15 @@ module LMC
     end
 
     def get_backstage_serviceinfos
-      get "cloud-service-backstage/serviceinfos"
+      get 'cloud-service-backstage/serviceinfos'
     end
 
     def get_accounts
-      get "cloud-service-auth/accounts"
+      get 'cloud-service-auth/accounts'
     end
 
     def get_accounts_objects
-      result = get ["cloud-service-auth", "accounts"]
+      result = get ['cloud-service-auth', 'accounts']
       if result.code == 200
         accounts = result.map do |aj|
           Account.new(aj)
@@ -60,113 +56,69 @@ module LMC
       return accounts
     end
 
-    # functionality should be moved to Account class
-    #def get_account(name, type = nil)
-    #  accounts = get_accounts_objects.select do |a|
-    #    (name.nil? || a.name == name) && (type.nil? || a.type == type)
-    #  end
-    #  if accounts.length == 1
-    #    return accounts[0]
-    #  else
-    #    raise "Did not specify exactly one account"
-    #  end
-    #end
-
     def invite_user_to_account(email, account_id, type, authorities = [])
-      body = {name: email, state: "ACTIVE", type: type}
-      body["authorities"] = authorities
-      post ["cloud-service-auth", "accounts", account_id, 'members'], body
+      body = {name: email, state: 'ACTIVE', type: type}
+      body['authorities'] = authorities
+      post ['cloud-service-auth', 'accounts', account_id, 'members'], body
     end
 
     def get(path, params = nil)
-      RestClient.log = ("stdout") if Cloud.debug
-      begin
-        prepared_headers = headers
-        prepared_headers[:params] = params
-        args = {
-            :method => :get,
-            :url => build_url(path),
-            :headers => prepared_headers,
-        }
-        args.merge!(rest_options)
-        resp = RestClient::Request.execute args
-        return LMCResponse.new(resp)
-      rescue RestClient::ExceptionWithResponse => e
-        puts "EXCEPTION: " + e.to_s if Cloud.debug
-        puts "EX.response: " + e.response.to_s if Cloud.debug
-        puts JSON.parse(e.response)["message"] if Cloud.debug
-        raise e
-        #return LMCResponse.new(e.response)
-      end
+      prepared_headers = headers
+      prepared_headers[:params] = params
+      args = {
+          :method => :get,
+          :url => build_url(path),
+          :headers => prepared_headers
+      }
+      execute_request args
     end
 
     def put(path, body_object)
-      RestClient.log = ("stdout") if Cloud.debug
-      begin
-        args = {
-            :method => :put,
-            :url => build_url(path),
-            :payload => body_object.to_json,
-            :headers => headers
+      args = {
+          :method => :put,
+          :url => build_url(path),
+          :payload => body_object.to_json
 
-        }
-        args.merge!(rest_options)
-        resp = RestClient::Request.execute args
-        return LMCResponse.new(resp)
-      rescue RestClient::ExceptionWithResponse => e
-        puts "EXCEPTION: " + e.to_s if Cloud.debug
-        puts "EX.response: " + e.response.to_s if Cloud.debug
-        puts JSON.parse(e.response)["message"] if Cloud.debug
-        return LMCResponse.new(e.response)
-      end
+      }
+      execute_request args
     end
 
     def post(path, body_object)
       args = {
           :method => :post,
           :url => build_url(path),
-          :payload => body_object.to_json,
+          :payload => body_object.to_json
       }
       execute_request args
     end
 
     def delete(path, body_object = nil)
-      RestClient.log = ("stdout") if Cloud.debug
-      begin
-        args = {
-            :method => :delete,
-            :url => build_url(path),
-            :payload => body_object.to_json,
-            :headers => headers
-        }
-        args.merge!(rest_options)
-        resp = RestClient::Request.execute args
-        return LMCResponse.new(resp)
-      rescue RestClient::ExceptionWithResponse => e
-        puts "EXCEPTION: " + e.to_s if Cloud.debug
-        puts "EX.response: " + e.response.to_s if Cloud.debug
-        puts JSON.parse(e.response)["message"] if Cloud.debug
-        return LMCResponse.new(e.response)
-      end
+      args = {
+          :method => :delete,
+          :url => build_url(path),
+          :payload => body_object.to_json,
+          :headers => headers
+      }
+      execute_request args
     end
 
     ##
     # public accessors
     ##
     def session_token
-      @auth_token["value"]
+      @auth_token['value']
     end
 
     def build_url(*path_components)
-      protocol = "https"
+      protocol = 'https'
       if !Cloud.use_tls
-        protocol = "http"
+        protocol = 'http'
       end
-      ["#{protocol}://#{@cloud_host}", path_components].flatten.compact.join("/")
+      ["#{protocol}://#{@cloud_host}", path_components].flatten.compact.join('/')
     end
 
     def auth_for_accounts(account_ids)
-      puts "Authorizing for accounts: " + account_ids.to_s if Cloud.debug
+      puts 'Authorizing for accounts: ' + account_ids.to_s if Cloud.debug
       authorize(account_ids)
     end
 
@@ -184,8 +136,8 @@ module LMC
     def authorize(account_ids = [], tos = [])
       if account_ids != @last_authorized_account_ids
         begin
-          reply = post(["cloud-service-auth", "auth"], {name: @user, password: @password, accountIds: account_ids, termsOfUse: tos})
-          puts "authorize reply " + reply.inspect if Cloud.debug
+          reply = post(['cloud-service-auth', 'auth'], {name: @user, password: @password, accountIds: account_ids, termsOfUse: tos})
+          puts 'authorize reply ' + reply.inspect if Cloud.debug
           @last_authorized_account_ids = account_ids
           @auth_token = reply
           @auth_ok = true
@@ -199,7 +151,7 @@ module LMC
     end
 
     def auth_bearer
-      "Bearer " + session_token
+      'Bearer ' + session_token
     end
 
     def headers
@@ -213,9 +165,7 @@ module LMC
 
     def rest_options
       options = {}
-      if !@verify_tls
-        options[:verify_ssl] = false
-      end
+      options[:verify_ssl] = false unless @verify_tls
       options
     end
 

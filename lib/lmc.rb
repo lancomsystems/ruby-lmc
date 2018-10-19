@@ -1,6 +1,18 @@
 require 'json'
 require 'restclient'
 
+module LMC
+  SERVICELIST = ['cloud-service-auth',
+                 'cloud-service-devices',
+                 'cloud-service-monitoring',
+                 'cloud-service-config',
+                 'cloud-service-licenses']
+
+  def self.useful
+    return true
+  end
+end
+
 Dir.glob(File.expand_path("../lmc/mixins/*.rb", __FILE__)).each do |file|
   require file
 end
@@ -15,14 +27,3 @@ end
   end
 end
 
-module LMC
-  SERVICELIST = ['cloud-service-auth',
-                 'cloud-service-devices',
-                 'cloud-service-monitoring',
-                 'cloud-service-config',
-                 'cloud-service-licenses']
-
-  def self.useful
-    return true
-  end
-end

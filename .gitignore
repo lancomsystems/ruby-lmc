@@ -7,6 +7,8 @@
 /tmp/
 .idea/workspace.xml
 .idea/tasks.xml
+.idea/misc.xml
+.idea/modules.xml
 .idea/.rakeTasks
 #When developing a gem, use the gemspec method in your Gemfile to avoid duplication. In general, a gem's Gemfile should contain the Rubygems source and a single gemspec line. Do not check your Gemfile.lock into version control, since it enforces precision that does not exist in the gem command, which is used to install gems in practice. 
 Gemfile.lock

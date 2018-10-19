@@ -161,4 +161,8 @@ class LmcAccountTest < ::Minitest::Test
     refute_empty logs
   end
 
+  def test_authority_by_id
+    account = LMC::Account.new
+  end
+
 end

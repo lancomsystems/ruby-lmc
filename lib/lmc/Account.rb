@@ -114,6 +114,13 @@ module LMC
       @cloud.delete ["cloud-service-auth", "accounts", id, "members", "self"]
     end
 
+    def authority(authority_id)
+      response = @cloud.get(
+        ['cloud-service-auth', 'accounts', id, 'authorities', authority_id]
+      )
+      Authority.new(response, self)
+    end
+
     def authorities
       response = @cloud.get ['cloud-service-auth', 'accounts', id, 'authorities']
       raise 'Unable to get authorities' unless response.code == 200

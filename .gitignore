@@ -5,6 +5,7 @@
 /pkg/
 /spec/reports/
 /tmp/
+.idea/*.iml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/misc.xml

@@ -131,7 +131,7 @@ module LMC
     end
 
     def children
-      @cloud.auth_for_account self
+      @cloud.auth_for_accounts([self.id, ROOT_ACCOUNT_UUID])
       response = @cloud.get ['cloud-service-auth', 'accounts', id, 'children']
       response.map {|child| Account.new child}
     end

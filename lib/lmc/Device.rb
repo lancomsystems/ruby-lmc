@@ -58,6 +58,10 @@ module LMC
       raise "device logs not supported"
     end
 
+    def config
+      get_config_or_ticket
+    end
+
     private
     def get_config_state
       reply = @cloud.get ["cloud-service-config", "configdevice", "accounts", @account.id, "state"], {"deviceIds" => @id}
@@ -67,6 +71,13 @@ module LMC
       end
     end
 
+    def get_config_or_ticket
+      response = @cloud.get ["cloud-service-config", "configbuilder", "accounts", @account.id, "devices", @id, "ui"]
+      ticket = ConfigTicket.new(@cloud, @account, self)
+      ticket.response = response.body
+      raise 'response'
+      ticket.config
+    end
 
   end
 

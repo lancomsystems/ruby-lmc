@@ -158,6 +158,10 @@ module LMC
       end
     end
 
+    def devices
+      Device.get_for_account self
+    end
+
     def config_updatestates
       @cloud.auth_for_accounts([id])
       response = @cloud.get ["cloud-service-config", "configdevice", "accounts", id, "updatestates"]

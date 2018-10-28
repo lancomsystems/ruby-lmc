@@ -31,15 +31,6 @@ module LMC
       end
     end
 
-    def self.get_children_from_root account
-      cloud = Cloud.instance
-      cloud.auth_for_accounts [ROOT_ACCOUNT_UUID]
-      response = cloud.get ['cloud-service-auth', 'accounts', account.id, 'children'],
-                           {"parent.id" => account.id}
-      response.map {|child| Account.new child}
-    end
-
-
     def initialize(data)
       @cloud = LMC::Cloud.instance
       apply_data(data)
@@ -66,12 +57,8 @@ module LMC
         delete_action.data = {'password' => Cloud.password,
                               'accountId' => @id}
         deleted = delete_action.post
-        if deleted.code == 200
-          @id = nil
-          return true
-        else
-          raise "unable to delete account: #{deleted.body.message}"
-        end
+        @id = nil
+        return true
       end
     end
 
@@ -86,11 +73,7 @@ module LMC
       puts ids.inspect if Cloud.debug
       principals = ids.map do |principal_id|
         response = Cloud.instance.get ["cloud-service-auth", "accounts", @id, 'members', principal_id]
-        if response.code == 200
-          principal = response.body
-        else
-          raise "ERROR: #{response.code} #{response.body.message}"
-        end
+        principal = response.body
         puts principal.inspect if Cloud.debug
         principal
       end
@@ -116,7 +99,7 @@ module LMC
 
     def authority(authority_id)
       response = @cloud.get(
-        ['cloud-service-auth', 'accounts', id, 'authorities', authority_id]
+          ['cloud-service-auth', 'accounts', id, 'authorities', authority_id]
       )
       Authority.new(response, self)
     end
@@ -149,13 +132,9 @@ module LMC
       return [] if @type == "PRIVATE_CLOUD"
       @cloud.auth_for_accounts([id])
       response = @cloud.get ["cloud-service-devices", "accounts", id, "sites"]
-      if response.code == 200
-        return response.body.map {|data|
-          Site.new(data, self)
-        }
-      elsif response.code == 404
-        return []
-      end
+      return response.body.map {|data|
+        Site.new(data, self)
+      }
     end
 
     def devices

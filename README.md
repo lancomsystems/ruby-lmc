@@ -30,6 +30,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ### Running a single test file
     rake test TEST=test/file_with_tests.rb
 
+### Running a single test
+    rake test TESTOPTS="--name=test_foobar1"
 ### Tests against real LMC instances
 
 #### credentials file

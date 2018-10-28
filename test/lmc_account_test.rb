@@ -162,7 +162,13 @@ class LmcAccountTest < ::Minitest::Test
   end
 
   def test_authority_by_id
-    account = LMC::Account.new
+    mock_cloud = Minitest::Mock.new
+    mock_cloud.expect :call, {}, [["cloud-service-auth", "accounts", "31FF009A-DC34-4C5B-827F-076DA590EAEF", "authorities", "36D88B55-913C-4DA8-8C64-A42A7C465A8D"]]
+    LMC::Cloud.instance.stub :get, mock_cloud do
+      account = LMC::Account.new({"id" => "31FF009A-DC34-4C5B-827F-076DA590EAEF"})
+      account.authority"36D88B55-913C-4DA8-8C64-A42A7C465A8D"
+    end
+    assert mock_cloud.verify
   end
 
 end

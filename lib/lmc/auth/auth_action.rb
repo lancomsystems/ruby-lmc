@@ -1,8 +1,8 @@
 module LMC
   class AuthAction
     include LMC::ServiceResource
-    include LMC::JSONAble
     resource_attrs :name, :type, :data
+    include LMC::JSONAble
     # action types
     ACCOUNT_INVITE = 'ACCOUNT_INVITE'
     PASSWORD_RESET = 'PASSWORD_RESET'

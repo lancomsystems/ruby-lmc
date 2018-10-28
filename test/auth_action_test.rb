@@ -8,6 +8,6 @@ class LmcAuthActionTest < Minitest::Test
     a.data = {'accountId' => 'abe29447-8bf9-4b9f-a004-37ae8370001d', 'password' => "FOObar123?"}
     mock_cloud.expect :post, {}, [["cloud-service-auth", "actions"], a]
     a.post
-    mock_cloud.verify
+    assert mock_cloud.verify
   end
 end

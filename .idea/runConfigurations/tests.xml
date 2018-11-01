@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="tests" type="TestUnitRunConfigurationType" factoryName="Test::Unit/Shoulda/Minitest" show_console_on_std_err="true" show_console_on_std_out="true">
+  <configuration default="false" name="tests" type="TestUnitRunConfigurationType" factoryName="Test::Unit/Shoulda/Minitest">
     <predefined_log_file id="RUBY_TESTUNIT" enabled="true" />
-    <module name="ruby-lmc" />
-    <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-I test" />
+    <module name="lmc" />
+    <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="" />
     <RTEST_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
     <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
     <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />

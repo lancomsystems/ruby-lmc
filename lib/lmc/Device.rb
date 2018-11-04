@@ -14,11 +14,6 @@ module LMC
       @account = data["account"]
     end
 
-    def get_config_for_account(account)
-      response = @cloud.get ["cloud-service-config", "configbuilder", "accounts", account.id, "devices", @id, "ui"]
-      JSON.parse(JSON.generate(response.body.to_h)) #terrible hack to get it to work for now. needs way to get more raw body_object from Response
-    end
-
     def set_config_for_account(config, account)
       @cloud.put ["cloud-service-config", "configbuilder", "accounts", account.id, "devices", @id, "ui"], config
     end
@@ -50,16 +45,8 @@ module LMC
       @config_state ||= get_config_state
     end
 
-    def logs
-      # https://lmctest/#/project/6392b234-b11c-498a-a077-a5f5b23c54a0/devices/compact/eaafa152-62cf-48a1-be65-b222886daa6d/logging
-      #cloud = Cloud.instance
-      ##cloud.auth_for_accounts [id]
-      #cloud.get ["cloud-service-logging", "accounts", id, "logs?lang=DE"]
-      raise "device logs not supported"
-    end
-
     def config
-      get_config_or_ticket
+      LMC::DeviceConfig.new(@cloud, @account, self)
     end
 
     private
@@ -69,14 +56,6 @@ module LMC
         #            binding.pry
         DeviceConfigState.new reply.body[@id]
       end
-    end
-
-    def get_config_or_ticket
-      response = @cloud.get ["cloud-service-config", "configbuilder", "accounts", @account.id, "devices", @id, "ui"]
-      ticket = ConfigTicket.new(@cloud, @account, self)
-      ticket.response = response.body
-      raise 'response'
-      ticket.config
     end
 
   end

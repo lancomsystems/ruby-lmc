@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LMC
   class AuthAction
     include LMC::ServiceResource

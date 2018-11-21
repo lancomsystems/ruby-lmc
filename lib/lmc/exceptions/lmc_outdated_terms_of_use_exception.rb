@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LMC
   class OutdatedTermsOfUseException < Exception
     def initialize(response = {})

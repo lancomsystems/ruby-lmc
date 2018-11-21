@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'account_manager.rb'
 require_relative 'entity'
 module LMC

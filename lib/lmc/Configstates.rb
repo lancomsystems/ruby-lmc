@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LMC
   class Configstates
     attr_reader :actual, :outdated

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LMC
   class Principal
     PRINCIPAL_URL_BASE = %w[cloud-service-auth users].freeze

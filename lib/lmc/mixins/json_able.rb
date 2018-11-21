@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LMC::JSONAble
   def self.included(klass)
     klass.class_exec do

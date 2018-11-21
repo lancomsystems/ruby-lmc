@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LMC
   class Device
     attr_reader :id, :name, :model, :serial, :heartbeatstate

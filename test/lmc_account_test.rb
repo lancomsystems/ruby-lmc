@@ -2,7 +2,6 @@ require 'test_helper'
 class LmcAccountTest < ::Minitest::Test
   TEST_ORGA = 'ruby-lmc'
   TEST_ACCOUNT_NOT_OWNED = 'permanent_test_not_owned'
-  TEST_ACCOUNT_NON_UNIQUE = 'permanent_test_non_unique'
 
   RENAME_ACCOUNT_NAME = 'prerename'
   RENAME_NEW_NAME = "postrename"
@@ -12,7 +11,9 @@ class LmcAccountTest < ::Minitest::Test
   end
 
   def teardown
-    LMC::Cloud.instance.get_accounts_objects.select {|a| [RENAME_NEW_NAME, RENAME_ACCOUNT_NAME].include? a.name}.each do |a|
+    instance = LMC::Cloud.instance
+    instance.auth_for_account @orga
+    instance.get_accounts_objects.select {|a| [RENAME_NEW_NAME, RENAME_ACCOUNT_NAME].include? a.name}.each do |a|
       a.delete!
     end
   end
@@ -64,13 +65,6 @@ class LmcAccountTest < ::Minitest::Test
     end
   end
 
-  def test_getting_account_by_non_unique_name
-    exception = assert_raises RuntimeError do
-      LMC::Account.get_by_uuid_or_name TEST_ACCOUNT_NON_UNIQUE
-    end
-    assert_equal 'Account name not unique', exception.message
-  end
-
   def test_account_exists
     good = LMC::Account.get_by_name TEST_ORGA
     bad = LMC::Account.new({name: 'foobar'})
@@ -94,11 +88,14 @@ class LmcAccountTest < ::Minitest::Test
   end
 
   def test_creating_a_project
-    orga = LMC::Account.get_by_name TEST_ORGA
+    parent_account = Fixtures.test_account
+    post_response = Fixtures.test_response id: '9be7722c-228f-4a43-b5f2-605f27f1885b'
     account = LMC::Account.new({"name" => __method__.to_s,
                                 "type" => 'PROJECT',
-                                "parent" => orga.id})
-    account.save
+                                "parent" => parent_account.id})
+    LMC::Cloud.instance.stub :post, post_response do
+      account.save
+    end
     refute_nil account.id
   end
 

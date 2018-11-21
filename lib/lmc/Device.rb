@@ -3,7 +3,6 @@ module LMC
     attr_reader :id, :name, :model, :serial, :heartbeatstate
 
     def initialize(data)
-      @cloud = Cloud.instance
       @id = data['id']
       @comment = data['comment']
       @name = data['status']['name']
@@ -12,6 +11,8 @@ module LMC
       @heartbeatstate = data['status']['heartbeatState']
       @status = data['status']
       @account = data['account']
+      @cloud = @account.cloud
+      @cloud ||= Cloud.instance
     end
 
     def get_config_for_account(account)
@@ -56,6 +57,14 @@ module LMC
       ##cloud.auth_for_accounts [id]
       #cloud.get ["cloud-service-logging", "accounts", id, "logs?lang=DE"]
       raise "device logs not supported"
+    end
+
+    def record name
+      MonitoringRecord.new(@cloud, @account, self, name)
+    end
+
+    def monitor_record_group
+      'DEVICE'
     end
 
     private

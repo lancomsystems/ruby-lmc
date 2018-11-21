@@ -13,15 +13,15 @@ module LMC
   end
 end
 
-Dir.glob(File.expand_path("../lmc/mixins/*.rb", __FILE__)).each do |file|
+Dir.glob(File.expand_path('../lmc/mixins/*.rb', __FILE__)).each do |file|
   require file
 end
 
-Dir.glob(File.expand_path("../lmc/*.rb", __FILE__)).each do |file|
+Dir.glob(File.expand_path('../lmc/*.rb', __FILE__)).each do |file|
   require file
 end
 
-["exceptions", "auth"].each do |folder|
+['exceptions', 'auth', 'monitoring'].each do |folder|
   Dir.glob(File.expand_path("../lmc/#{folder}/*.rb", __FILE__)).each do |file|
     require file
   end

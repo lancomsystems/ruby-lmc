@@ -56,7 +56,7 @@ module LMC
         delete_action.name = Cloud.user
         delete_action.data = {'password' => Cloud.password,
                               'accountId' => @id}
-        deleted = delete_action.post
+        delete_action.post
         @id = nil
         return true
       end

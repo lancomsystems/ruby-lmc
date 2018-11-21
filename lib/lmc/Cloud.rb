@@ -151,7 +151,7 @@ module LMC
     end
 
     def auth_bearer
-      'Bearer ' + session_token
+      "Bearer #{session_token}"
     end
 
     def headers

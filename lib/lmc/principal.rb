@@ -1,5 +1,13 @@
 module LMC
   class Principal
+    PRINCIPAL_URL_BASE = %w[cloud-service-auth users].freeze
+
+    # this is actually a bad hack because the lmc api treats users different
+    # from principals.
+    def self.get_self(cloud)
+      new(cloud.get([PRINCIPAL_URL_BASE, 'self']))
+    end
+
     def initialize(data)
       apply_data(data)
     end
@@ -15,6 +23,11 @@ module LMC
       apply_data(response.body)
       return self
     end
+
+    def to_s
+      "#{@name} - #{@id}"
+    end
+
     def to_json(*a)
       {
           "name" => @name,
@@ -24,7 +37,11 @@ module LMC
     end
 
     private
+
     def apply_data(data)
+      data.keys.each do |k|
+        data[k.to_s] = data[k]
+      end
       @id = data['id']
       @name = data['name']
       @password = data['password']

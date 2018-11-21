@@ -33,6 +33,14 @@ module LMC
       @body_object[key]
     end
 
+    def []=(key, val)
+      @body_object[key] = val
+    end
+
+    def keys
+      @body_object.keys
+    end
+
     def map(&block)
       @body_object.map(&block)
     end

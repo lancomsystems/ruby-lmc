@@ -3,6 +3,7 @@
 module LMC
   class Principal
     PRINCIPAL_URL_BASE = %w[cloud-service-auth users].freeze
+    attr_reader :id, :name, :password, :type
 
     # this is actually a bad hack because the lmc api treats users different
     # from principals.
@@ -22,7 +23,7 @@ module LMC
                    raise "editing principals not supported"
                    #@cloud.put ["cloud-service-auth", "principals", @id], self
                  end
-      apply_data(response.body)
+      apply_data(response)
       return self
     end
 

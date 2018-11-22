@@ -17,6 +17,23 @@ class LmcPrincipalTest < Minitest::Test
     assert_mock mock_get
   end
 
+  def test_saving_principal
+    p = LMC::Principal.new name: 'foobar', password: 'secret', type: 'test'
+    mock_post = Minitest::Mock.new
+    mock_post.expect :call, Fixtures.test_response({ id: @principal_id }),
+                     [["cloud-service-auth", "principals"], LMC::Principal]
+    LMC::Cloud.instance.stub :post, mock_post do
+      saved_principal = p.save
+      assert_equal @principal_id, saved_principal.id
+      assert_equal @principal_id, p.id
+      # saving a principal with existing ID is not supported
+      assert_raises RuntimeError do
+        p.save
+      end
+    end
+
+  end
+
   def test_to_s
     u = @principal
     assert_equal 'foobar - a35fe21b-1605-431a-bf1e-88d087f48cc0', u.to_s

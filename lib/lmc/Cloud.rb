@@ -12,9 +12,10 @@ module LMC
       Cloud.verify_tls = true
     end
 
-    def self.instance(opts = {authorize: true})
+    def self.instance(opts = { authorize: true })
       @@inst ||= self.new(@cloud_host, @user, @password, opts[:authorize])
     end
+
     attr_reader :auth_ok, :cloud_host, :user, :password
 
     def initialize(cloud_host, user, pass, auth = true)
@@ -57,7 +58,7 @@ module LMC
     end
 
     def invite_user_to_account(email, account_id, type, authorities = [])
-      body = {name: email, state: 'ACTIVE', type: type}
+      body = { name: email, state: 'ACTIVE', type: type }
       body['authorities'] = authorities
       post ['cloud-service-auth', 'accounts', account_id, 'members'], body
     end
@@ -136,7 +137,7 @@ module LMC
     def authorize(account_ids = [], tos = [])
       if account_ids != @last_authorized_account_ids
         begin
-          reply = post(['cloud-service-auth', 'auth'], {name: @user, password: @password, accountIds: account_ids, termsOfUse: tos})
+          reply = post(['cloud-service-auth', 'auth'], { name: @user, password: @password, accountIds: account_ids, termsOfUse: tos })
           puts 'authorize reply ' + reply.inspect if Cloud.debug
           @last_authorized_account_ids = account_ids
           @auth_token = reply

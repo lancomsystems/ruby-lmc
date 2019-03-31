@@ -118,13 +118,12 @@ module LMC
       ["#{protocol}://#{@cloud_host}", path_components].flatten.compact.join('/')
     end
 
-    def auth_for_accounts(account_ids)
-      puts 'Authorizing for accounts: ' + account_ids.to_s if Cloud.debug
-      authorize(account_ids)
+    def auth_for_accounts(accounts)
+      authorize(accounts)
     end
 
     def auth_for_account(account)
-      auth_for_accounts([account.id])
+      authorize([account])
     end
 
     def accept_tos(tos)
@@ -134,7 +133,14 @@ module LMC
 
     private
 
-    def authorize(account_ids = [], tos = [])
+    def authorize(accounts = [], tos = [])
+      account_ids = accounts.map {|a|
+        if a.respond_to? :id
+          a.id
+        else
+          a
+        end
+      }
       if account_ids != @last_authorized_account_ids
         begin
           reply = post(['cloud-service-auth', 'auth'], { name: @user, password: @password, accountIds: account_ids, termsOfUse: tos })

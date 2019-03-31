@@ -170,4 +170,18 @@ class LmcAccountTest < ::Minitest::Test
     assert mock_cloud.verify
   end
 
+  def test_duplicate_account_names
+    name = 'heinz'
+    cloud = MiniTest::Mock.new
+    accounts = [LMC::Account.new({ 'name' => name }),
+                LMC::Account.new({ 'name' => name })]
+    cloud.expect :call, accounts, []
+    e = assert_raises RuntimeError do
+      LMC::Cloud.instance.stub :get_accounts_objects, cloud do
+        LMC::Account.get_by_name(name)
+      end
+    end
+    assert_equal 'Account name not unique', e.message
+  end
+
 end

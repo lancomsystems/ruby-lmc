@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'recursive-open-struct', '~> 1.1'
   spec.add_development_dependency 'simplecov', '~> 0.15'
   spec.add_development_dependency 'pry-nav', '~> 0.2.4'
+  spec.add_development_dependency 'rubocop', '~> 0.58.1'
 
   spec.add_runtime_dependency 'json', '~> 2.0'
   spec.add_runtime_dependency 'rest-client', '~> 2.0'

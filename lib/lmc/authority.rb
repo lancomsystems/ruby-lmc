@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LMC
   class Authority
     attr_accessor :account, :id, :name, :visibility, :type

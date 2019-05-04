@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 class LmcResponseTest < Minitest::Test
   def test_response_error_handling

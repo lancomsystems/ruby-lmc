@@ -1,17 +1,20 @@
+# frozen_string_literal: true
+
 module LMC
   class Device
     attr_reader :id, :name, :model, :serial, :heartbeatstate
 
     def initialize(data)
-      @cloud = Cloud.instance
-      @id = data["id"]
-      @comment = data["comment"]
-      @name = data["status"]["name"]
-      @serial = data["status"]["serial"]
-      @model = data["status"]["model"]
-      @heartbeatstate = data["status"]["heartbeatState"]
-      @status = data["status"]
-      @account = data["account"]
+      @id = data['id']
+      @comment = data['comment']
+      @name = data['status']['name']
+      @serial = data['status']['serial']
+      @model = data['status']['model']
+      @heartbeatstate = data['status']['heartbeatState']
+      @status = data['status']
+      @account = data['account']
+      @cloud = @account.cloud
+      @cloud ||= Cloud.instance
     end
 
     def set_config_for_account(config, account)
@@ -19,7 +22,7 @@ module LMC
     end
 
     def get_monitor_widgets(widget_item_ids)
-      @cloud.get ["cloud-service-monitoring", @account.id, "devices", @id, "monitordata"], {:widgetItemIds => widget_item_ids.join(",")}
+      @cloud.get ["cloud-service-monitoring", @account.id, "devices", @id, "monitordata"], { :widgetItemIds => widget_item_ids.join(",") }
     end
 
     def self.get_for_account(account)
@@ -49,9 +52,18 @@ module LMC
       LMC::DeviceConfig.new(@cloud, @account, self)
     end
 
+    def record name
+      MonitoringRecord.new(@cloud, @account, self, name)
+    end
+
+    def monitor_record_group
+      'DEVICE'
+    end
+
     private
+
     def get_config_state
-      reply = @cloud.get ["cloud-service-config", "configdevice", "accounts", @account.id, "state"], {"deviceIds" => @id}
+      reply = @cloud.get ["cloud-service-config", "configdevice", "accounts", @account.id, "state"], { "deviceIds" => @id }
       if reply.code == 200
         #            binding.pry
         DeviceConfigState.new reply.body[@id]

@@ -28,11 +28,23 @@ module LMC
     end
 
     def configjson
+      confighash.to_json
+    end
+
+    def confighash
+      items.to_h
+    end
+
+    def items
+      response.items
+    end
+
+    private
+    def response
       return @response unless @response.nil?
       fetch_result
     end
 
-    private
 
     def fetch_result
       response_or_ticket = @cloud.get(url_configbuilder).body
@@ -42,7 +54,7 @@ module LMC
       else
         @response = response_or_ticket
       end
-
+        @response
     end
 
     def redeem_ticket(tries)

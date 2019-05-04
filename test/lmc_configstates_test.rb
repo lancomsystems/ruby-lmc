@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 class LmcConfigstatesTest < Minitest::Test
   ACCOUNT_NAME = 'ruby-lmc'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 module LMC
   class LMCResponse
@@ -31,6 +33,14 @@ module LMC
     # of the old response which was just the body parsed to a hash or array
     def [](key)
       @body_object[key]
+    end
+
+    def []=(key, val)
+      @body_object[key] = val
+    end
+
+    def keys
+      @body_object.keys
     end
 
     def map(&block)

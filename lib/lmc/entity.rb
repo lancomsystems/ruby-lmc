@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LMC
   class Entity
     def self.get_by_uuid_or_name term

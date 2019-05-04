@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'credentials_helper'
 module LMC::Tests
   class CloudInstanceHelper

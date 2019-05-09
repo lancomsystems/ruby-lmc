@@ -3,6 +3,7 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rubocop/rake_task'
+require 'rdoc/task'
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
@@ -15,3 +16,9 @@ RuboCop::RakeTask.new(:autocop) do |t|
   t.options = ['--only', 'Style/FrozenStringLiteralComment', '--auto-correct', 'lib', 'test', 'Rakefile', 'lmc.gemspec']
 end
 task :default => :test
+
+
+RDoc::Task.new do |rdoc|
+  rdoc.main = "README.rdoc"
+  rdoc.rdoc_files.include("README.rdoc", "lib/**/*.rb")
+end

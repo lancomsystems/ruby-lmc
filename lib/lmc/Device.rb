@@ -2,7 +2,7 @@
 
 module LMC
   class Device
-    attr_reader :id, :name, :model, :serial, :heartbeatstate
+    attr_reader :id, :name, :model, :serial, :heartbeatstate, :cloud, :account
 
     def initialize(data)
       @id = data['id']

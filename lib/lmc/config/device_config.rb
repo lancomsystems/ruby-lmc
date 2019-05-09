@@ -19,6 +19,11 @@ module LMC
        @ticket_id]
     end
 
+
+    # def url_stringtable
+    #   ['cloud-service-config', 'configdsc', 'stringtable', dscui['stringtableId']]
+    # end
+
     def initialize(cloud, account, device)
       @cloud = cloud
       @account = account
@@ -35,11 +40,28 @@ module LMC
       items.to_h
     end
 
+    ##
+    # Returns a hash similar to #confighash but with the OIDs replaced with more
+    # meaningful descriptions.
+
+    def descriptive_confighash
+      item_map = dscui.item_by_id_map
+      confighash.map {|k, v|
+        [item_map[k].description, v]
+      }.to_h
+    end
+
     def items
       response.items
     end
 
+    def dscui
+      @dscui ||= DeviceDSCUi.new @device
+    end
+
+
     private
+
     def response
       return @response unless @response.nil?
       fetch_result
@@ -54,7 +76,7 @@ module LMC
       else
         @response = response_or_ticket
       end
-        @response
+      @response
     end
 
     def redeem_ticket(tries)
@@ -70,5 +92,9 @@ module LMC
         sleep 0.5
       end
     end
+
+    #def stringtable
+    #  @stringtable ||= @cloud.get(url_stringtable).body
+    #end
   end
 end

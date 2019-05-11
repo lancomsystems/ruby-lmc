@@ -48,7 +48,7 @@ module LMC
       result = get ['cloud-service-auth', 'accounts']
       if result.code == 200
         accounts = result.map do |aj|
-          Account.new(aj)
+          Account.new(self, aj)
         end
       else
         raise "Unable to fetch accounts: #{result.body.message}"

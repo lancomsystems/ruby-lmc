@@ -23,7 +23,7 @@ module LMC
       elsif @body_object.class == TrueClass || @body_object.class == FalseClass
         @body = @body_object
       else
-        raise "Unknown json parse result"
+        raise "Unknown json parse result: #{@body_object.class}"
       end
       @code = response.code
       @headers = response.headers

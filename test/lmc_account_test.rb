@@ -69,7 +69,7 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_account_exists
     good = LMC::Account.get_by_name TEST_ORGA
-    bad = LMC::Account.new({ name: 'foobar' })
+    bad = LMC::Account.new(nil, {name: 'foobar'})
     assert good.exists?
     refute bad.exists?
   end
@@ -90,15 +90,17 @@ class LmcAccountTest < ::Minitest::Test
   end
 
   def test_creating_a_project
-    parent_account = Fixtures.test_account
     post_response = Fixtures.test_response id: '9be7722c-228f-4a43-b5f2-605f27f1885b'
-    account = LMC::Account.new({ "name" => __method__.to_s,
-                                 "type" => 'PROJECT',
-                                 "parent" => parent_account.id })
-    LMC::Cloud.instance.stub :post, post_response do
-      account.save
-    end
+    mock_lmc = Fixtures.mock_lmc
+    mock_lmc.expect :auth_for_accounts, nil, [Array]
+    mock_lmc.expect :post, post_response, [Array, LMC::Account]
+    parent_account = Fixtures.test_account Fixtures.mock_lmc
+    account = LMC::Account.new(mock_lmc, {"name" => __method__.to_s,
+                                          "type" => 'PROJECT',
+                                          "parent" => parent_account.id})
+    account.save
     refute_nil account.id
+    assert_mock mock_lmc
   end
 
   def test_creating_then_deleting_a_project
@@ -111,9 +113,9 @@ class LmcAccountTest < ::Minitest::Test
     end
     fail unless testaccount.nil?
     orga = LMC::Account.get_by_name TEST_ORGA
-    account = LMC::Account.new({ "name" => unique_name,
-                                 "type" => 'PROJECT',
-                                 "parent" => orga.id })
+    account = LMC::Account.new(LMC::Cloud.instance, {"name" => unique_name,
+                                                     "type" => 'PROJECT',
+                                                     "parent" => orga.id})
     account.save
     assert account.delete!
     check_deleted = assert_raises RuntimeError, "Account #{account} not deleted" do
@@ -131,7 +133,7 @@ class LmcAccountTest < ::Minitest::Test
   end
 
   def test_account_renaming
-    @rename_account = LMC::Account.new({ 'parent' => @orga.id, 'type' => 'PROJECT', 'name' => RENAME_ACCOUNT_NAME })
+    @rename_account = LMC::Account.new(LMC::Cloud.instance, {'parent' => @orga.id, 'type' => 'PROJECT', 'name' => RENAME_ACCOUNT_NAME})
     @rename_account.save
     pre = LMC::Account.get_by_name RENAME_ACCOUNT_NAME
     pre.name = RENAME_NEW_NAME
@@ -162,19 +164,21 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_authority_by_id
     mock_cloud = Minitest::Mock.new
-    mock_cloud.expect :call, {}, [["cloud-service-auth", "accounts", "31FF009A-DC34-4C5B-827F-076DA590EAEF", "authorities", "36D88B55-913C-4DA8-8C64-A42A7C465A8D"]]
-    LMC::Cloud.instance.stub :get, mock_cloud do
-      account = LMC::Account.new({ "id" => "31FF009A-DC34-4C5B-827F-076DA590EAEF" })
-      account.authority "36D88B55-913C-4DA8-8C64-A42A7C465A8D"
-    end
+    mock_cloud.expect :get, {}, [['cloud-service-auth',
+                                  'accounts',
+                                  '31FF009A-DC34-4C5B-827F-076DA590EAEF',
+                                  'authorities',
+                                  '36D88B55-913C-4DA8-8C64-A42A7C465A8D']]
+    account = LMC::Account.new(mock_cloud, {'id' => '31FF009A-DC34-4C5B-827F-076DA590EAEF'})
+    account.authority '36D88B55-913C-4DA8-8C64-A42A7C465A8D'
     assert mock_cloud.verify
   end
 
   def test_duplicate_account_names
     name = 'heinz'
     cloud = MiniTest::Mock.new
-    accounts = [LMC::Account.new({ 'name' => name }),
-                LMC::Account.new({ 'name' => name })]
+    accounts = [LMC::Account.new(nil, {'name' => name}),
+                LMC::Account.new(nil, {'name' => name})]
     cloud.expect :call, accounts, []
     e = assert_raises RuntimeError do
       LMC::Cloud.instance.stub :get_accounts_objects, cloud do

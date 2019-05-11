@@ -11,7 +11,7 @@ module LMC
     def self.get(id)
       cloud = Cloud.instance
       result = cloud.get ["cloud-service-auth", "accounts", id.to_s]
-      return Account.new(result.body)
+      return Account.new(cloud, result.body)
     end
 
     def self.get_by_uuid uuid
@@ -33,8 +33,8 @@ module LMC
       end
     end
 
-    def initialize(data)
-      @cloud = LMC::Cloud.instance
+    def initialize(cloud, data)
+      @cloud = cloud
       apply_data(data)
     end
 
@@ -42,12 +42,12 @@ module LMC
     def save
       response = if @id.nil?
                    @cloud.auth_for_accounts [@parent]
-                   @cloud.post ["cloud-service-auth", "accounts"], self
+                   @cloud.post ['cloud-service-auth', 'accounts'], self
                  else
                    @cloud.post path, self
                  end
       apply_data(response.body)
-      return self
+      self
     end
 
     def delete!
@@ -60,7 +60,7 @@ module LMC
                               'accountId' => @id}
         delete_action.post
         @id = nil
-        return true
+        true
       end
     end
 
@@ -118,7 +118,7 @@ module LMC
     def children
       @cloud.auth_for_accounts([self.id, ROOT_ACCOUNT_UUID])
       response = @cloud.get ['cloud-service-auth', 'accounts', id, 'children']
-      response.map {|child| Account.new child}
+      response.map {|child| Account.new @cloud, child}
     end
 
 

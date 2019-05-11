@@ -6,7 +6,7 @@ class LmcDeviceConfigTest < Minitest::Test
     @account_id = '4eec92c3-3dfb-4445-800b-b9e5822e963a'
     @device_id = '8d7ff9bb-1d4c-4374-acb1-a0680ab7d85a'
     @ticket_id = '83fb175c-6c5b-4aa9-93bb-8b405e633456'
-    @account = LMC::Account.new 'id' => @account_id
+    @account = LMC::Account.new nil, 'id' => @account_id
     @device = LMC::Device.new 'id' => @device_id,
                               'account' => @account,
                               'status' => {}

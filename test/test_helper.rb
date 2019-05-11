@@ -27,8 +27,12 @@ require 'minitest/reporters'
 MiniTest::Reporters.use!
 
 module Fixtures
-  def self.test_account
-    LMC::Account.new 'id' => '8c99dceb-e7cc-4ad2-9df6-8790625e51ee'
+  def self.mock_lmc
+    Minitest::Mock.new
+  end
+
+  def self.test_account(cloud)
+    LMC::Account.new cloud, 'id' => '8c99dceb-e7cc-4ad2-9df6-8790625e51ee'
   end
 
   def self.test_device(account)

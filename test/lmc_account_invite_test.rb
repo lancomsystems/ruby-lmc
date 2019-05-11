@@ -8,7 +8,7 @@ class LmcAccountInviteTest < Minitest::Test
   def setup
     @new_orga_member_id = nil
     @orga = LMC::Account.get_by_name TEST_ORGA
-    @project = LMC::Account.new({'parent' => @orga.id, 'name' => 'inviteproject', 'type' => 'PROJECT'}).save
+    @project = LMC::Account.new(LMC::Cloud.instance, {'parent' => @orga.id, 'name' => 'inviteproject', 'type' => 'PROJECT'}).save
 
 
   end
@@ -22,7 +22,7 @@ class LmcAccountInviteTest < Minitest::Test
     refute_nil @orga.authorities
     refute_empty @project.authorities
     assert_raises RuntimeError do
-      LMC::Account.new({id: 'invalid_id'}).authorities
+      LMC::Account.new(LMC::Cloud.instance,{id: 'invalid_id'}).authorities
     end
   end
 

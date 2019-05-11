@@ -5,6 +5,7 @@ module LMC
     attr_accessor :account, :id, :name, :visibility, :type
 
     def initialize(data, account)
+      #TODO: Use cloud object from account
       @cloud = Cloud.instance
       apply_data(data)
       @account = account

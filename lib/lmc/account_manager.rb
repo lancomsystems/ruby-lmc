@@ -34,7 +34,7 @@ module LMC
           # TODO wenn der default authority nicht gibt geht das ding kaputt
           invited = lmcen.invite_user_to_account(line, distro['id'], type, [authority['id']])
           puts 'Invite response:' + invited.inspect if @global_options[:debug]
-          puts 'Invited ' + invited['name'].to_s + " to account #{distro["name"]}(#{invited.code})." if @global_options[:v]
+          puts 'Invited ' + invited['name'].to_s + " to account #{distro['name']}(#{invited.code})." if @global_options[:v]
           if invited.code != 200
             @errors << {:line => line, :result => invited.body}
             return nil
@@ -50,7 +50,7 @@ module LMC
         if @options['send-mail'] && invited
           mailbody = <<END
   Hallo,
-  auf #{lmcen.cloud_host} wurde eine Einladung zu dem Account #{distro["name"]} für den Nutzer #{invited["name"]} erstellt.
+  auf #{lmcen.cloud_host} wurde eine Einladung zu dem Account #{distro['name']} für den Nutzer #{invited['name']} erstellt.
   
   Falls der Account noch nicht existiert, kann dieser Link zur Registrierung genutzt werden:
 END

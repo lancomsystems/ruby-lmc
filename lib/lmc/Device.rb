@@ -37,11 +37,11 @@ module LMC
         data['account'] = account
         LMC::Device.new(data)
       end
-      return devices
+      devices
     end
 
     def self.get_for_account_id(account_id)
-      self.get_for_account Account.get(account_id)
+      get_for_account Account.get(account_id)
     end
 
     def config_state
@@ -52,7 +52,7 @@ module LMC
       LMC::DeviceConfig.new(@cloud, @account, self)
     end
 
-    def record name
+    def record(name)
       MonitoringRecord.new(@cloud, @account, self, name)
     end
 
@@ -69,7 +69,5 @@ module LMC
         DeviceConfigState.new reply.body[@id]
       end
     end
-
   end
-
 end

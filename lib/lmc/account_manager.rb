@@ -2,9 +2,9 @@
 
 module LMC
   class AccountManager
-    #@options
-    #@global_options
-    #@errors
+    # @options
+    # @global_options
+    # @errors
     attr_reader :errors
 
     def initialize(options, global_options)
@@ -20,7 +20,7 @@ module LMC
       begin
         account = Account.get(distro['id'])
         account_authorities = account.authorities
-        #puts account_authorities.inspect if @global_options[:debug]
+        # puts account_authorities.inspect if @global_options[:debug]
         if @global_options[:debug]
           account_authorities.each do |a|
             puts a['name']
@@ -28,10 +28,10 @@ module LMC
           end
         end
         authority = account_authorities.find {|auth| auth['name'] == authority_name}
-        #puts "account authorities: #{account_authorities}" if @global_options[:debug]
+        # puts "account authorities: #{account_authorities}" if @global_options[:debug]
         puts authority if @global_options[:debug]
         if !@options[:dry]
-          # TODO wenn der default authority nicht gibt geht das ding kaputt
+          # TODO: wenn der default authority nicht gibt geht das ding kaputt
           invited = lmcen.invite_user_to_account(line, distro['id'], type, [authority['id']])
           puts 'Invite response:' + invited.inspect if @global_options[:debug]
           puts 'Invited ' + invited['name'].to_s + " to account #{distro['name']}(#{invited.code})." if @global_options[:v]
@@ -79,7 +79,7 @@ END
         puts resp.inspect
         puts resp['message']
       end
-      return true
+      true
     end
   end
 end

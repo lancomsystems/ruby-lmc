@@ -15,16 +15,16 @@ module LMC
       apply_data(data)
     end
 
-    #returns itself, allows chaining
+    # returns itself, allows chaining
     def save
       response = if @id.nil?
                    Cloud.instance.post ['cloud-service-auth', 'principals'], self
                  else
                    raise 'editing principals not supported'
-                   #@cloud.put ["cloud-service-auth", "principals", @id], self
+                   # @cloud.put ["cloud-service-auth", "principals", @id], self
                  end
       apply_data(response)
-      return self
+      self
     end
 
     def to_s

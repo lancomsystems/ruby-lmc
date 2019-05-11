@@ -12,12 +12,10 @@ module LMC
         r += "Name: #{tos['name']}, Date #{tos['acceptance']}\n"
 
       end
-      return r
+      r
     end
     def missing
       @response['details']['missing']
     end
   end
-
-
 end

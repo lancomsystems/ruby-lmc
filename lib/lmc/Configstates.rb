@@ -10,7 +10,5 @@ module LMC
       @actual ||= 0
       @outdated ||= 0
     end
-
   end
-
 end

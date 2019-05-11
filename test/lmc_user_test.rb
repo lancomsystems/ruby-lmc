@@ -2,7 +2,6 @@
 
 require 'test_helper'
 class LmcUserTest < Minitest::Test
-
   @@credentials = LMC::Tests::CredentialsHelper.credentials.pwchange
   @@changecloud = LMC::Cloud.new(@@credentials.host, @@credentials.email, @@credentials.password)
   @@currentmillis = (Time.now.to_f * 1000).floor

@@ -21,7 +21,7 @@ module LMC
         acc.store(item.id, item)
         acc
       end
-      return item_map
+      item_map
     end
 
     class Version

@@ -170,5 +170,4 @@ class LmcDSCUiTest < Minitest::Test
     assert_mock mock_lmc
     assert_equal ['1.2.1', '1.2.9000'], dscui.item_by_id_map.keys
   end
-
 end

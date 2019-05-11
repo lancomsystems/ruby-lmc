@@ -3,7 +3,6 @@
 require 'ostruct'
 module LMC
   class LMCResponse
-
     attr_reader :body, :code, :headers
 
     def initialize(response)
@@ -59,5 +58,4 @@ module LMC
         @body_object.empty?
     end
   end
-
 end

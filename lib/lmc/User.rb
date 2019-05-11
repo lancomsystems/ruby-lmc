@@ -2,7 +2,7 @@
 
 module LMC
   class User
-    #todo: look into hiding password
+    # TODO: look into hiding password
     attr_reader :email
 
     def initialize(data)
@@ -12,13 +12,13 @@ module LMC
 
     # current registration process unclear and likely to have changed
     # since this code was written.
-    #def register()
+    # def register()
     #    # cloud instance by default authenticates.
     #    # for registration specifically, no authentication is required
     #    # should be possible without email and password for "admin" user
     #    cloud = Cloud.instance
     #    cloud.post ["cloud-service-auth", "users"], {"password" => @password, "email" => @email}
-    #end
+    # end
 
     def update(old_pw)
       cloud = Cloud.instance
@@ -32,11 +32,9 @@ module LMC
 
     def request_pw_reset
       action = AuthAction.new Cloud.instance
-      action.type='PASSWORD_RESET'
-      action.name=@email
+      action.type = 'PASSWORD_RESET'
+      action.name = @email
       action.post
     end
-
   end
-
 end

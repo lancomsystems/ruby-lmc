@@ -24,7 +24,7 @@ module LMC
     def account=(account)
       if @account == nil
         @account = account
-        return true
+        true
       else
         raise 'Cannot replace account for site'
       end
@@ -33,8 +33,7 @@ module LMC
     def configstates
       response = @cloud.get ['cloud-service-config', 'configsubnetgroup', 'accounts', @account.id, 'subnetgroups', @subnet_group_id, 'updatestates']
       states = LMC::Configstates.new response.body
-      return states
+      states
     end
   end
-
 end

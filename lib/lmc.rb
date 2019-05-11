@@ -11,7 +11,7 @@ module LMC
                  'cloud-service-licenses']
 
   def self.useful
-    return true
+    true
   end
 end
 
@@ -28,4 +28,3 @@ end
     require file
   end
 end
-

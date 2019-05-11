@@ -17,6 +17,5 @@ module LMC
     def collection_name
       'actions'
     end
-
   end
 end

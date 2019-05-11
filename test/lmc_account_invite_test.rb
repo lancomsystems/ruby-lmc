@@ -10,7 +10,6 @@ class LmcAccountInviteTest < Minitest::Test
     @orga = LMC::Account.get_by_name TEST_ORGA
     @project = LMC::Account.new(LMC::Cloud.instance, {'parent' => @orga.id, 'name' => 'inviteproject', 'type' => 'PROJECT'}).save
 
-
   end
 
   def teardown

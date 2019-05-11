@@ -24,17 +24,14 @@ module LMC
       end
     end
     def method_on_instance_of_class
-      puts("cloud-service-#{service_name} #{self.inspect}, #{@cloud}")
+      puts("cloud-service-#{service_name} #{inspect}, #{@cloud}")
     end
     def collection_path
       ["cloud-service-#{service_name}", collection_name]
     end
 
-
     def post
       @cloud.post collection_path, self
     end
-
-
   end
 end

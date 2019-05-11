@@ -15,11 +15,11 @@ module LMC
       @grouping = grouping
     end
 
-    def scalar name, count, period
+    def scalar(name, count, period)
       fetch_data name, count, period, 'scalar'
     end
 
-    def row name, count, period
+    def row(name, count, period)
       fetch_data name, count, period, 'row'
     end
 

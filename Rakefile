@@ -11,12 +11,24 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/**/*_test.rb']
 end
 
-
 RuboCop::RakeTask.new(:autocop) do |t|
-  t.options = ['--only', 'Style/FrozenStringLiteralComment,Style/StringLiterals,Style/StringLiteralsInInterpolation', '--auto-correct', 'lib', 'test', 'Rakefile', 'lmc.gemspec']
+  autofix = [
+      'Layout/EmptyLines',
+      'Layout/EmptyLinesAroundClassBody',
+      'Layout/EmptyLinesAroundModuleBody',
+      'Layout/LeadingCommentSpace',
+      'Layout/SpaceAroundOperators',
+      'Layout/TrailingBlankLines',
+      'Style/CommentAnnotation',
+      'Style/FrozenStringLiteralComment',
+      'Style/MethodDefParentheses',
+      'Style/RedundantSelf',
+      'Style/RedundantReturn',
+      'Style/StringLiterals',
+      'Style/StringLiteralsInInterpolation']
+  t.options = ['--only', autofix.join(','), '--auto-correct', 'lib', 'test', 'Rakefile', 'lmc.gemspec']
 end
 task :default => :test
-
 
 RDoc::Task.new do |rdoc|
   rdoc.main = 'README.rdoc'

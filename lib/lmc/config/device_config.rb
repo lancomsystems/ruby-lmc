@@ -19,7 +19,6 @@ module LMC
        @ticket_id]
     end
 
-
     # def url_stringtable
     #   ['cloud-service-config', 'configdsc', 'stringtable', dscui['stringtableId']]
     # end
@@ -59,14 +58,12 @@ module LMC
       @dscui ||= DeviceDSCUi.new @device
     end
 
-
     private
 
     def response
       return @response unless @response.nil?
       fetch_result
     end
-
 
     def fetch_result
       response_or_ticket = @cloud.get(url_configbuilder).body
@@ -93,8 +90,8 @@ module LMC
       end
     end
 
-    #def stringtable
+    # def stringtable
     #  @stringtable ||= @cloud.get(url_stringtable).body
-    #end
+    # end
   end
 end

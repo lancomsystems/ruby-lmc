@@ -6,7 +6,7 @@ module LMC::JSONAble
       def to_json
         hash = {}
         self.class.resource_attributes.each do |var|
-          val = self.instance_variable_get "@#{var}"
+          val = instance_variable_get "@#{var}"
           hash[var] = val unless val.nil?
         end
         hash.to_json

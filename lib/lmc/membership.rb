@@ -12,6 +12,5 @@ module LMC
           'authorities' => @authorities
       }.to_json(*a)
     end
-
   end
 end

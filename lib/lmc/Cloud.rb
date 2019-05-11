@@ -13,7 +13,7 @@ module LMC
     end
 
     def self.instance(opts = { authorize: true })
-      @@inst ||= self.new(@cloud_host, @user, @password, opts[:authorize])
+      @@inst ||= new(@cloud_host, @user, @password, opts[:authorize])
     end
 
     attr_reader :auth_ok, :cloud_host, :user, :password
@@ -54,7 +54,7 @@ module LMC
         raise "Unable to fetch accounts: #{result.body.message}"
       end
 
-      return accounts
+      accounts
     end
 
     def invite_user_to_account(email, account_id, type, authorities = [])
@@ -130,7 +130,6 @@ module LMC
       authorize([], tos)
     end
 
-
     private
 
     def authorize(accounts = [], tos = [])
@@ -167,7 +166,7 @@ module LMC
       if @auth_ok
         headers[:Authorization] = auth_bearer
       end
-      return headers
+      headers
     end
 
     def rest_options

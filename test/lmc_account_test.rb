@@ -187,5 +187,4 @@ class LmcAccountTest < ::Minitest::Test
     end
     assert_equal 'Account name not unique', e.message
   end
-
 end

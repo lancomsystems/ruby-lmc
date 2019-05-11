@@ -21,9 +21,9 @@ module LMC
     #returns itself, allows chaining
     def save
       response = if @id.nil?
-                   Cloud.instance.post ["cloud-service-auth", 'accounts', @account.id, "authorities"], self
+                   Cloud.instance.post ['cloud-service-auth', 'accounts', @account.id, 'authorities'], self
                  else
-                   raise "editing authorities not supported"
+                   raise 'editing authorities not supported'
                    #@cloud.put ["cloud-service-auth", "principals", @id], self
                  end
       apply_data(response.body)
@@ -32,9 +32,9 @@ module LMC
 
     def to_json(*a)
       {
-          "name" => @name,
-          "type" => @type,
-          "visibility" => @visibility
+          'name' => @name,
+          'type' => @type,
+          'visibility' => @visibility
       }.to_json(*a)
     end
 

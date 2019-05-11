@@ -6,10 +6,10 @@ module LMC
 
     def to_json(*a)
       {
-          "name" => @name,
-          "type" => @type,
-          "state" => @state,
-          "authorities" => @authorities
+          'name' => @name,
+          'type' => @type,
+          'state' => @state,
+          'authorities' => @authorities
       }.to_json(*a)
     end
 

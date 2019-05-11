@@ -163,7 +163,7 @@ class LmcDSCUiTest < Minitest::Test
 }
 '
     dsc_response = Fixtures.test_response_json dsc_body_json, 200
-    mock_lmc.expect :get, dsc_response, [["cloud-service-config", "configdevice", "accounts", "4996c720-11d3-43e9-9599-d63bda7272cf", "devices", "a5d83d9d-9029-4227-9a60-09f4724bb2af", "dscui"]]
+    mock_lmc.expect :get, dsc_response, [['cloud-service-config', 'configdevice', 'accounts', '4996c720-11d3-43e9-9599-d63bda7272cf', 'devices', 'a5d83d9d-9029-4227-9a60-09f4724bb2af', 'dscui']]
     account = LMC::Account.new(mock_lmc, {'id' => '4996c720-11d3-43e9-9599-d63bda7272cf'})
     device = Fixtures.test_device account
     dscui = LMC::DeviceDSCUi.new device

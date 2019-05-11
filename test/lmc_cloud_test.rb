@@ -29,7 +29,7 @@ class LmcCloudTest < Minitest::Test
     }
     c = LMC::Cloud.instance
     ::RestClient::Request.stub :execute, fake_execute do
-      response = c.put ["service", "test"], {"this" => "body"}
+      response = c.put ['service', 'test'], {'this' => 'body'}
       assert_kind_of(LMC::LMCResponse, response)
     end
   end
@@ -38,11 +38,11 @@ class LmcCloudTest < Minitest::Test
     cloud = LMC::Cloud.instance
     pre_state = LMC::Cloud.use_tls
     LMC::Cloud.use_tls=false
-    http_url = cloud.build_url(["test", "url"])
+    http_url = cloud.build_url(['test', 'url'])
     assert_equal "http://#{LMC::Tests::CredentialsHelper.credentials.ok.host}/test/url", http_url
     cloud = LMC::Cloud.instance
     LMC::Cloud.use_tls=true
-    http_url = cloud.build_url(["test", "url"])
+    http_url = cloud.build_url(['test', 'url'])
     assert_equal "https://#{LMC::Tests::CredentialsHelper.credentials.ok.host}/test/url", http_url
     LMC::Cloud.use_tls = pre_state
   end

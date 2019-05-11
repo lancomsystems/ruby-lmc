@@ -10,17 +10,17 @@ module LMC
 
     def self.get(id)
       cloud = Cloud.instance
-      result = cloud.get ["cloud-service-auth", "accounts", id.to_s]
+      result = cloud.get ['cloud-service-auth', 'accounts', id.to_s]
       return Account.new(cloud, result.body)
     end
 
     def self.get_by_uuid uuid
-      raise "Missing argument" if uuid.nil?
+      raise 'Missing argument' if uuid.nil?
       return self.get uuid
     end
 
     def self.get_by_name(name, type = nil)
-      raise "Missing argument" if name.nil?
+      raise 'Missing argument' if name.nil?
       accounts = Cloud.instance.get_accounts_objects.select do |a|
         (name.nil? || a.name == name) && (type.nil? || a.type == type)
       end
@@ -71,10 +71,10 @@ module LMC
     end
 
     def members
-      ids = Cloud.instance.get ["cloud-service-auth", "accounts", @id, 'members'], {"select" => "id"}
+      ids = Cloud.instance.get ['cloud-service-auth', 'accounts', @id, 'members'], {'select' => 'id'}
       puts ids.inspect if Cloud.debug
       principals = ids.map do |principal_id|
-        response = Cloud.instance.get ["cloud-service-auth", "accounts", @id, 'members', principal_id]
+        response = Cloud.instance.get ['cloud-service-auth', 'accounts', @id, 'members', principal_id]
         principal = response.body
         puts principal.inspect if Cloud.debug
         principal
@@ -92,11 +92,11 @@ module LMC
     #end
 
     def remove_membership(member_id)
-      @cloud.delete ["cloud-service-auth", "accounts", id, "members", member_id]
+      @cloud.delete ['cloud-service-auth', 'accounts', id, 'members', member_id]
     end
 
     def remove_membership_self
-      @cloud.delete ["cloud-service-auth", "accounts", id, "members", "self"]
+      @cloud.delete ['cloud-service-auth', 'accounts', id, 'members', 'self']
     end
 
     def authority(authority_id)
@@ -126,14 +126,14 @@ module LMC
       # https://lmctest/cloud-service-logging/accounts/6392b234-b11c-498a-a077-a5f5b23c54a0/logs?lang=DE
       cloud = Cloud.instance
       cloud.auth_for_accounts [id]
-      cloud.get(["cloud-service-logging", "accounts", id, "logs?lang=DE"]).body
+      cloud.get(['cloud-service-logging', 'accounts', id, 'logs?lang=DE']).body
     end
 
     def sites
       # private clouds can not have sites
-      return [] if @type == "PRIVATE_CLOUD"
+      return [] if @type == 'PRIVATE_CLOUD'
       @cloud.auth_for_accounts([id])
-      response = @cloud.get ["cloud-service-devices", "accounts", id, "sites"]
+      response = @cloud.get ['cloud-service-devices', 'accounts', id, 'sites']
       return response.body.map {|data|
         Site.new(data, self)
       }
@@ -145,16 +145,16 @@ module LMC
 
     def config_updatestates
       @cloud.auth_for_accounts([id])
-      response = @cloud.get ["cloud-service-config", "configdevice", "accounts", id, "updatestates"]
+      response = @cloud.get ['cloud-service-config', 'configdevice', 'accounts', id, 'updatestates']
       return LMC::Configstates.new response.body
     end
 
     def to_json(*a)
       {
-          "name" => @name,
-          "state" => @state,
-          "type" => @type,
-          "parent" => @parent
+          'name' => @name,
+          'state' => @state,
+          'type' => @type,
+          'parent' => @parent
       }.to_json(*a)
     end
 
@@ -166,16 +166,16 @@ module LMC
 
     ## should be put into entity or such
     def path
-      ["cloud-service-auth", "accounts", @id].join("/")
+      ['cloud-service-auth', 'accounts', @id].join('/')
     end
 
     def apply_data(data)
-      @id = data["id"]
-      @parent = data["parent"]
-      @name = data["name"]
-      @state = data["state"]
-      @type = data["type"]
-      @identifier = data["identifier"]
+      @id = data['id']
+      @parent = data['parent']
+      @name = data['name']
+      @state = data['state']
+      @type = data['type']
+      @identifier = data['identifier']
     end
 
   end

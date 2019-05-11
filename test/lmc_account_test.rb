@@ -6,7 +6,7 @@ class LmcAccountTest < ::Minitest::Test
   TEST_ACCOUNT_NOT_OWNED = 'permanent_test_not_owned'
 
   RENAME_ACCOUNT_NAME = 'prerename'
-  RENAME_NEW_NAME = "postrename"
+  RENAME_NEW_NAME = 'postrename'
 
   def setup
     @orga = LMC::Account.get_by_name TEST_ORGA
@@ -56,14 +56,14 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_getting_account_by_invalid_name
     begin
-      nonexistant_account = LMC::Account.get_by_uuid_or_name "Nonexistant"
+      nonexistant_account = LMC::Account.get_by_uuid_or_name 'Nonexistant'
     rescue RuntimeError => e
-      assert_equal "Did not find account", e.message
+      assert_equal 'Did not find account', e.message
     end
     begin
-      nonexistant_account = LMC::Account.get_by_uuid_or_name "Nonexistant account with space"
+      nonexistant_account = LMC::Account.get_by_uuid_or_name 'Nonexistant account with space'
     rescue RuntimeError => e
-      assert_equal "Did not find account", e.message
+      assert_equal 'Did not find account', e.message
     end
   end
 
@@ -95,9 +95,9 @@ class LmcAccountTest < ::Minitest::Test
     mock_lmc.expect :auth_for_accounts, nil, [Array]
     mock_lmc.expect :post, post_response, [Array, LMC::Account]
     parent_account = Fixtures.test_account Fixtures.mock_lmc
-    account = LMC::Account.new(mock_lmc, {"name" => __method__.to_s,
-                                          "type" => 'PROJECT',
-                                          "parent" => parent_account.id})
+    account = LMC::Account.new(mock_lmc, {'name' => __method__.to_s,
+                                          'type' => 'PROJECT',
+                                          'parent' => parent_account.id})
     account.save
     refute_nil account.id
     assert_mock mock_lmc
@@ -109,13 +109,13 @@ class LmcAccountTest < ::Minitest::Test
     begin
       testaccount = LMC::Account.get_by_name unique_name
     rescue RuntimeError => e
-      raise e unless e.message == "Did not find account"
+      raise e unless e.message == 'Did not find account'
     end
     fail unless testaccount.nil?
     orga = LMC::Account.get_by_name TEST_ORGA
-    account = LMC::Account.new(LMC::Cloud.instance, {"name" => unique_name,
-                                                     "type" => 'PROJECT',
-                                                     "parent" => orga.id})
+    account = LMC::Account.new(LMC::Cloud.instance, {'name' => unique_name,
+                                                     'type' => 'PROJECT',
+                                                     'parent' => orga.id})
     account.save
     assert account.delete!
     check_deleted = assert_raises RuntimeError, "Account #{account} not deleted" do

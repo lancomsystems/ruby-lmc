@@ -3,23 +3,23 @@
 require 'test_helper'
 class LmcAuthorityTest < ::Minitest::Test
   def test_authority_aux
-    account = LMC::Account.new(nil, {"id" => SecureRandom.uuid})
+    account = LMC::Account.new(nil, {'id' => SecureRandom.uuid})
     authority = LMC::Authority.new(
-        {"name" => "ein name", "type" => "CUSTOM", "visibility" => "PUBLIC"}, account)
-    assert_equal("ein name (CUSTOM/PUBLIC)", authority.to_s)
+        {'name' => 'ein name', 'type' => 'CUSTOM', 'visibility' => 'PUBLIC'}, account)
+    assert_equal('ein name (CUSTOM/PUBLIC)', authority.to_s)
     assert_equal '{"name":"ein name","type":"CUSTOM","visibility":"PUBLIC"}', authority.to_json
   end
 
   def test_authority_rights
     fake_get = lambda {|r|
-      return OpenStruct.new({:body => "FAAKE"})
+      return OpenStruct.new({:body => 'FAAKE'})
     }
     LMC::Cloud.instance.stub :get, fake_get do
-    account = LMC::Account.new(LMC::Cloud.instance, {"id" => SecureRandom.uuid})
+    account = LMC::Account.new(LMC::Cloud.instance, {'id' => SecureRandom.uuid})
     authority = LMC::Authority.new(
-        {"name" => "ein name", "type" => "CUSTOM", "visibility" => "PUBLIC"}, account)
+        {'name' => 'ein name', 'type' => 'CUSTOM', 'visibility' => 'PUBLIC'}, account)
 
-      assert_equal "FAAKE", authority.rights
+      assert_equal 'FAAKE', authority.rights
     end
   end
 
@@ -31,7 +31,7 @@ class LmcAuthorityTest < ::Minitest::Test
                            'visibility' => 'Private'}
     mock_response.expect :body, response_body
     mock_lmc = Minitest::Mock.new
-    mock_lmc.expect :post, mock_response, [["cloud-service-auth", "accounts", "5ba017ae-fff1-4495-8d84-0bf30ace4c04", "authorities"], LMC::Authority]
+    mock_lmc.expect :post, mock_response, [['cloud-service-auth', 'accounts', '5ba017ae-fff1-4495-8d84-0bf30ace4c04', 'authorities'], LMC::Authority]
     LMC::Cloud.stub :instance, mock_lmc do
       account = LMC::Account.new mock_lmc, 'id' => '5ba017ae-fff1-4495-8d84-0bf30ace4c04'
       authority = LMC::Authority.new({'name' => 'testauthority', 'visibility' => 'PRIVATE'}, account)

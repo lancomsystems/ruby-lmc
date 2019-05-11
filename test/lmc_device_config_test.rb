@@ -22,10 +22,10 @@ class LmcDeviceConfigTest < Minitest::Test
     @config_request_args = [['cloud-service-config', 'configbuilder', 'accounts',
                              @account_id, 'devices', @device_id, 'ui']]
 
-    @dscui_request_args = [["cloud-service-config", "configdevice", "accounts", "4eec92c3-3dfb-4445-800b-b9e5822e963a",
-                            "devices", "8d7ff9bb-1d4c-4374-acb1-a0680ab7d85a", "dscui"]]
+    @dscui_request_args = [['cloud-service-config', 'configdevice', 'accounts', '4eec92c3-3dfb-4445-800b-b9e5822e963a',
+                            'devices', '8d7ff9bb-1d4c-4374-acb1-a0680ab7d85a', 'dscui']]
     @item_by_id_map = {'2.4' => LMC::DeviceDSCUi::Item.new({'some_type' => {'id' => '2.4',
-                                                                            'description' => ["some.name"]}})}
+                                                                            'description' => ['some.name']}})}
   end
 
   def test_config_direct

@@ -6,8 +6,8 @@ module LMC
     attr_reader :email
 
     def initialize(data)
-      @email = data["email"]
-      @password = data["password"]
+      @email = data['email']
+      @password = data['password']
     end
 
     # current registration process unclear and likely to have changed
@@ -23,7 +23,7 @@ module LMC
     def update(old_pw)
       cloud = Cloud.instance
       begin
-        cloud.post ["cloud-service-auth", "users", "self", "password"], {"password" => @password, 'verification' => old_pw}
+        cloud.post ['cloud-service-auth', 'users', 'self', 'password'], {'password' => @password, 'verification' => old_pw}
       rescue RestClient::BadRequest => e
         response_body = JSON.parse(e.response)
         raise "#{e.message} - #{response_body['message']}"
@@ -32,7 +32,7 @@ module LMC
 
     def request_pw_reset
       action = AuthAction.new Cloud.instance
-      action.type="PASSWORD_RESET"
+      action.type='PASSWORD_RESET'
       action.name=@email
       action.post
     end

@@ -7,9 +7,9 @@ module LMC
 
     def initialize(data, account)
       @cloud = Cloud.instance
-      @id = data["id"]
-      @name = data["name"]
-      @subnet_group_id = data["subnetGroupId"]
+      @id = data['id']
+      @name = data['name']
+      @subnet_group_id = data['subnetGroupId']
       @account = account
 
       if @account
@@ -26,12 +26,12 @@ module LMC
         @account = account
         return true
       else
-        raise "Cannot replace account for site"
+        raise 'Cannot replace account for site'
       end
     end
 
     def configstates
-      response = @cloud.get ["cloud-service-config", "configsubnetgroup", "accounts", @account.id, "subnetgroups", @subnet_group_id, "updatestates"]
+      response = @cloud.get ['cloud-service-config', 'configsubnetgroup', 'accounts', @account.id, 'subnetgroups', @subnet_group_id, 'updatestates']
       states = LMC::Configstates.new response.body
       return states
     end

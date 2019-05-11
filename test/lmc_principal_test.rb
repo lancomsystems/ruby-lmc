@@ -9,7 +9,7 @@ class LmcPrincipalTest < Minitest::Test
 
   def test_get_self
     mock_get = Minitest::Mock.new
-    mock_get.expect :call, Fixtures.test_response({}), [[["cloud-service-auth", "users"], "self"]]
+    mock_get.expect :call, Fixtures.test_response({}), [[['cloud-service-auth', 'users'], 'self']]
     LMC::Cloud.instance.stub :get, mock_get do
       principal = LMC::Principal.get_self LMC::Cloud.instance
       assert_kind_of LMC::Principal, principal
@@ -21,7 +21,7 @@ class LmcPrincipalTest < Minitest::Test
     p = LMC::Principal.new name: 'foobar', password: 'secret', type: 'test'
     mock_post = Minitest::Mock.new
     mock_post.expect :call, Fixtures.test_response({ id: @principal_id }),
-                     [["cloud-service-auth", "principals"], LMC::Principal]
+                     [['cloud-service-auth', 'principals'], LMC::Principal]
     LMC::Cloud.instance.stub :post, mock_post do
       saved_principal = p.save
       assert_equal @principal_id, saved_principal.id
@@ -41,6 +41,6 @@ class LmcPrincipalTest < Minitest::Test
   end
 
   def test_to_json
-    assert_equal "{\"name\":\"foobar\",\"type\":\"test\",\"password\":\"secret\"}", @principal.to_json
+    assert_equal '{"name":"foobar","type":"test","password":"secret"}', @principal.to_json
   end
 end

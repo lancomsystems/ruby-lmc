@@ -5,8 +5,8 @@ module LMC
     attr_reader :actual, :outdated
 
     def initialize(data)
-      @actual = data["ACTUAL"]
-      @outdated = data["OUTDATED"]
+      @actual = data['ACTUAL']
+      @outdated = data['OUTDATED']
       @actual ||= 0
       @outdated ||= 0
     end

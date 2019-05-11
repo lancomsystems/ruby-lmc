@@ -47,7 +47,7 @@ class LmcResponseTest < Minitest::Test
   def test_response_boolean
     response_mock = Minitest::Mock.new
     response_mock.expect :bytesize, 4
-    response_mock.expect :body, "true"
+    response_mock.expect :body, 'true'
     response_mock.expect :code, 200
     response_mock.expect :headers, []
     response = LMC::LMCResponse.new response_mock

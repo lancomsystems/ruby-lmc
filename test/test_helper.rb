@@ -40,13 +40,17 @@ module Fixtures
                     'account' => account, 'status' => {}
   end
 
-  def self.test_response(body, code = 200, headers = [])
-    body_json_string = body.to_json
+  def self.test_response_json(body_json_string, code = 200, headers = [])
     mock = Minitest::Mock.new
     mock.expect :bytesize, body_json_string.bytesize
     mock.expect :body, body_json_string
     mock.expect :code, code
     mock.expect :headers, headers
     LMC::LMCResponse.new(mock)
+  end
+
+  def self.test_response(body, code = 200, headers = [])
+    body_json_string = body.to_json
+    test_response_json body_json_string, code, headers
   end
 end

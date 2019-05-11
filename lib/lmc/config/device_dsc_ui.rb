@@ -12,10 +12,6 @@ module LMC
        @device.id, 'dscui']
     end
 
-    def sections(version)
-      @body['versions'][version].map {|section_wrapper| section_wrapper['section']}
-    end
-
     def item_by_id_map
       item_map = {}
       item_map.default = Item.dummy
@@ -47,7 +43,7 @@ module LMC
     end
 
     class Section
-      attr_reader :name, :groups
+      attr_reader :names, :groups
 
       def initialize(section_wrapper)
         section = section_wrapper['section']

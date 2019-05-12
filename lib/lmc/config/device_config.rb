@@ -58,7 +58,58 @@ module LMC
       @dscui ||= DeviceDSCUi.new @device
     end
 
+    def lcf
+      # lfc format findings:
+      # group headings in {} do not matter
+      # indentation does not matter
+      # table oids need to be enclosed in <>
+      # table cell oids need to be enclosed in () and should follow table oids
+
+      result = ''
+      result += lcf_header
+      items.each do |key, value|
+        if value.instance_of? String
+          result += "#{key} = #{value}\n"
+        elsif value.instance_of? Hash
+          rows = value['rows']
+          col_ids = value['colIds']
+          if rows.length > 0
+            result += "<#{key}>\n"
+            rows.each_with_index {|row, index|
+              row.each_with_index {|col, col_index|
+                result += "(#{key}.#{index + 1}.#{col_ids[col_index]}) = #{col}\n"}
+            }
+          end
+        else
+          result += "#{key} = #{value.class}\n"
+        end
+      end
+      result += lcf_footer
+    end
+
     private
+
+    ##
+    # Produces lcf header
+    # TODO: Replace magic numbers, current ones are for l1302
+    def lcf_header
+      "(LMC Configuration of '#{@device.name}' at #{Time.now} via ruby-lmc #{LMC::VERSION})
+(#{@device.status['fwLabel']}) (0x0020c11c,IDs:2,3,4,8,e,f//e08543ca,15,2b;0x0c0000d3)
+[#{@device.model}] #{lcf_device_version}
+[TYPE: LCF; VERSION: 1.00; HASHTYPE: none;]
+"
+    end
+
+    def lcf_device_version
+      v = 'v'
+      v += "#{@device.status['fwMajor']}."
+      v += "#{@device.status['fwMinor']}."
+      v + format('%04d', @device.status['fwBuild'])
+    end
+
+    def lcf_footer
+      '[END: LCF;]'
+    end
 
     def response
       return @response unless @response.nil?

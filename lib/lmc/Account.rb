@@ -56,8 +56,8 @@ module LMC
         delete_action = AuthAction.new @cloud
         delete_action.type = AuthAction::ACCOUNT_DELETE
         delete_action.name = Cloud.user
-        delete_action.data = {'password' => Cloud.password,
-                              'accountId' => @id}
+        delete_action.data = { 'password' => Cloud.password,
+                              'accountId' => @id }
         delete_action.post
         @id = nil
         true
@@ -71,7 +71,7 @@ module LMC
     end
 
     def members
-      ids = Cloud.instance.get ['cloud-service-auth', 'accounts', @id, 'members'], {'select' => 'id'}
+      ids = Cloud.instance.get ['cloud-service-auth', 'accounts', @id, 'members'], 'select' => 'id'
       puts ids.inspect if Cloud.debug
       principals = ids.map do |principal_id|
         response = Cloud.instance.get ['cloud-service-auth', 'accounts', @id, 'members', principal_id]
@@ -83,7 +83,7 @@ module LMC
     end
 
     def find_member_by_name(name)
-      members.find {|m| m.name == name}
+      members.find { |m| m.name == name }
     end
 
     # def update_member(principal_id, data)
@@ -118,7 +118,7 @@ module LMC
     def children
       @cloud.auth_for_accounts([id, ROOT_ACCOUNT_UUID])
       response = @cloud.get ['cloud-service-auth', 'accounts', id, 'children']
-      response.map {|child| Account.new @cloud, child}
+      response.map { |child| Account.new @cloud, child }
     end
 
     def logs
@@ -133,7 +133,7 @@ module LMC
       return [] if @type == 'PRIVATE_CLOUD'
       @cloud.auth_for_accounts([id])
       response = @cloud.get ['cloud-service-devices', 'accounts', id, 'sites']
-      response.body.map {|data|
+      response.body.map { |data|
         Site.new(data, self)
       }
     end

@@ -26,7 +26,7 @@ module LMC
     private
 
     def fetch_data(name, count, period, type, relative = 0)
-      r = @cloud.get record_url, { count: count, group: @grouping.monitor_record_group, groupId: @grouping.id, name: name, period: period, relative: relative, type: type }
+      r = @cloud.get record_url, count: count, group: @grouping.monitor_record_group, groupId: @grouping.id, name: name, period: period, relative: relative, type: type
       r.body
     end
   end

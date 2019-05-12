@@ -14,6 +14,7 @@ module LMC
     def service_name
       'auth'
     end
+
     def collection_name
       'actions'
     end

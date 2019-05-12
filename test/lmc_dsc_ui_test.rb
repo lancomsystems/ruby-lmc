@@ -3,13 +3,13 @@
 require 'test_helper'
 class LmcDSCUiTest < Minitest::Test
   @item_wrappers = [
-      {'entryfield_text' => {
+      { 'entryfield_text' => {
           'id' => '1.2.1',
-          'description' => ['str.dev_name']}},
+          'description' => ['str.dev_name'] } },
 
-      {'entryfield_text' => {
+      { 'entryfield_text' => {
           'id' => '1.2.2',
-          'description' => ['str.dev_name', 'why.is_there_another_desc']}}
+          'description' => ['str.dev_name', 'why.is_there_another_desc'] } }
   ]
 
   def self.item_wrappers
@@ -17,17 +17,17 @@ class LmcDSCUiTest < Minitest::Test
   end
 
   @group_wrappers = [
-      {'group' => {
+      { 'group' => {
           'name' => ['str.dev_name'],
           'members' => @item_wrappers
-      }}
+      } }
   ]
 
   @section_wrappers = [
-      {'section' => {
+      { 'section' => {
           'name' => ['str.foo_bar'],
           'members' => @group_wrappers
-      }}
+      } }
   ]
 
   def self.section_wrappers
@@ -70,12 +70,12 @@ class LmcDSCUiTest < Minitest::Test
   end
 
   def test_version
-    version_hash = {'Version_string_thing' => self.class.section_wrappers}
+    version_hash = { 'Version_string_thing' => self.class.section_wrappers }
     version = LMC::DeviceDSCUi::Version.new version_hash
     assert_equal version_hash.keys.first, version.version_string
     assert_equal self.class.section_wrappers.length, version.sections.length
-    version.sections.each {|section| assert_instance_of LMC::DeviceDSCUi::Section, section}
-    exp_items = self.class.item_wrappers.map {|im| LMC::DeviceDSCUi::Item.new im}
+    version.sections.each { |section| assert_instance_of LMC::DeviceDSCUi::Section, section }
+    exp_items = self.class.item_wrappers.map { |im| LMC::DeviceDSCUi::Item.new im }
     assert_equal(exp_items.map(&:id), version.items.map(&:id))
   end
 
@@ -164,7 +164,7 @@ class LmcDSCUiTest < Minitest::Test
 '
     dsc_response = Fixtures.test_response_json dsc_body_json, 200
     mock_lmc.expect :get, dsc_response, [['cloud-service-config', 'configdevice', 'accounts', '4996c720-11d3-43e9-9599-d63bda7272cf', 'devices', 'a5d83d9d-9029-4227-9a60-09f4724bb2af', 'dscui']]
-    account = LMC::Account.new(mock_lmc, {'id' => '4996c720-11d3-43e9-9599-d63bda7272cf'})
+    account = LMC::Account.new(mock_lmc, 'id' => '4996c720-11d3-43e9-9599-d63bda7272cf')
     device = Fixtures.test_device account
     dscui = LMC::DeviceDSCUi.new device
     assert_mock mock_lmc

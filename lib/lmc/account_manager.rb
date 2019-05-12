@@ -27,7 +27,7 @@ module LMC
             puts a.inspect
           end
         end
-        authority = account_authorities.find {|auth| auth['name'] == authority_name}
+        authority = account_authorities.find { |auth| auth['name'] == authority_name }
         # puts "account authorities: #{account_authorities}" if @global_options[:debug]
         puts authority if @global_options[:debug]
         if !@options[:dry]
@@ -36,11 +36,11 @@ module LMC
           puts 'Invite response:' + invited.inspect if @global_options[:debug]
           puts 'Invited ' + invited['name'].to_s + " to account #{distro['name']}(#{invited.code})." if @global_options[:v]
           if invited.code != 200
-            @errors << {:line => line, :result => invited.body}
+            @errors << { :line => line, :result => invited.body }
             return nil
           end
         else
-          invited = {'name' => line}
+          invited = { 'name' => line }
         end
 
         invite_url = lmcen.build_url('#', 'register', Base64.encode64(invited['name']))

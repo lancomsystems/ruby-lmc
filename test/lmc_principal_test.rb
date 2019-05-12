@@ -20,7 +20,7 @@ class LmcPrincipalTest < Minitest::Test
   def test_saving_principal
     p = LMC::Principal.new name: 'foobar', password: 'secret', type: 'test'
     mock_post = Minitest::Mock.new
-    mock_post.expect :call, Fixtures.test_response({ id: @principal_id }),
+    mock_post.expect :call, Fixtures.test_response(id: @principal_id),
                      [['cloud-service-auth', 'principals'], LMC::Principal]
     LMC::Cloud.instance.stub :post, mock_post do
       saved_principal = p.save

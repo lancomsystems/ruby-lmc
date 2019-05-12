@@ -133,7 +133,7 @@ module LMC
     private
 
     def authorize(accounts = [], tos = [])
-      account_ids = accounts.map {|a|
+      account_ids = accounts.map { |a|
         if a.respond_to? :id
           a.id
         else
@@ -142,7 +142,7 @@ module LMC
       }
       if account_ids != @last_authorized_account_ids
         begin
-          reply = post(['cloud-service-auth', 'auth'], { name: @user, password: @password, accountIds: account_ids, termsOfUse: tos })
+          reply = post(['cloud-service-auth', 'auth'], name: @user, password: @password, accountIds: account_ids, termsOfUse: tos)
           puts 'authorize reply ' + reply.inspect if Cloud.debug
           @last_authorized_account_ids = account_ids
           @auth_token = reply

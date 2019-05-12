@@ -30,7 +30,7 @@ class LmcResponseTest < Minitest::Test
     array_mock.expect :headers, []
 
     response = LMC::LMCResponse.new array_mock
-    response.each {|num|}
+    response.each { |num| }
   end
 
   def test_response_to_string

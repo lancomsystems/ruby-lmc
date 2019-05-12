@@ -14,9 +14,9 @@ class LmcDeviceConfigTest < Minitest::Test
         'ticketId' => @ticket_id
     }.to_json, code: 200, headers: nil
     @ticket_response.bytesize = @ticket_response.body.bytesize
-    config_body = {'items' => {
+    config_body = { 'items' => {
         '2.4' => 'LANCOM L-1310acn dual Wireless'
-    }}.to_json
+    } }.to_json
     @config_response = LMC::LMCResponse.new OpenStruct.new body: config_body, code: 200, headers: nil,
                                                            bytesize: config_body.bytesize
     @config_request_args = [['cloud-service-config', 'configbuilder', 'accounts',
@@ -24,8 +24,8 @@ class LmcDeviceConfigTest < Minitest::Test
 
     @dscui_request_args = [['cloud-service-config', 'configdevice', 'accounts', '4eec92c3-3dfb-4445-800b-b9e5822e963a',
                             'devices', '8d7ff9bb-1d4c-4374-acb1-a0680ab7d85a', 'dscui']]
-    @item_by_id_map = {'2.4' => LMC::DeviceDSCUi::Item.new({'some_type' => {'id' => '2.4',
-                                                                            'description' => ['some.name']}})}
+    @item_by_id_map = { '2.4' => LMC::DeviceDSCUi::Item.new( 'some_type' => { 'id' => '2.4',
+                                                                            'description' => ['some.name'] } ) }
   end
 
   def test_config_direct

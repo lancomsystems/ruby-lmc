@@ -23,12 +23,12 @@ class LmcCloudTest < Minitest::Test
   end
 
   def test_put
-    fake_execute = lambda {|r|
-      return OpenStruct.new({:bytesize => 0})
+    fake_execute = lambda { |r|
+      return OpenStruct.new(:bytesize => 0)
     }
     c = LMC::Cloud.instance
     ::RestClient::Request.stub :execute, fake_execute do
-      response = c.put ['service', 'test'], {'this' => 'body'}
+      response = c.put ['service', 'test'], 'this' => 'body'
       assert_kind_of(LMC::LMCResponse, response)
     end
   end

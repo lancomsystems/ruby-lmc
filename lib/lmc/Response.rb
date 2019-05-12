@@ -11,7 +11,7 @@ module LMC
         @body_object = JSON.parse response.body
       end
       if @body_object.class == Array
-        @body = @body_object.map {|elem|
+        @body = @body_object.map { |elem|
           if elem.is_a? Hash then
             OpenStruct.new(elem)
           else

@@ -5,7 +5,7 @@ class LmcConfigstatesTest < Minitest::Test
   ACCOUNT_NAME = 'ruby-lmc'
 
   def test_initializer
-    states = LMC::Configstates.new({'ACTUAL' => 7, 'OUTDATED' => 19})
+    states = LMC::Configstates.new('ACTUAL' => 7, 'OUTDATED' => 19)
     assert states.actual == 7
     assert states.outdated == 19
   end

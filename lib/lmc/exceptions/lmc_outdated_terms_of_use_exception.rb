@@ -14,6 +14,7 @@ module LMC
       end
       r
     end
+
     def missing
       @response['details']['missing']
     end

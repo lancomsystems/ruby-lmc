@@ -31,7 +31,7 @@ module LMC
         keys = v_hash.keys
         raise('More than one version key contained in dscui.') if keys.length > 1
         @version_string = keys.first
-        @sections = v_hash[@version_string].map {|section_wrapper| Section.new section_wrapper}
+        @sections = v_hash[@version_string].map { |section_wrapper| Section.new section_wrapper }
 
       end
 
@@ -51,7 +51,7 @@ module LMC
         section = section_wrapper['section']
         @names = section['name']
         members = section['members']
-        @groups = members.map {|group_wrapper|
+        @groups = members.map { |group_wrapper|
           Group.new group_wrapper unless group_wrapper['group'].nil?
         }.compact
 
@@ -64,7 +64,7 @@ module LMC
       def initialize(group_wrapper)
         group = group_wrapper['group']
         @names = group['name']
-        @items = group['members'].map {|item_wrapper| Item.new item_wrapper}
+        @items = group['members'].map { |item_wrapper| Item.new item_wrapper }
       end
     end
 
@@ -72,7 +72,7 @@ module LMC
       attr_reader :type, :id
 
       def self.dummy
-        Item.new({'dummy' => {'description' => []}})
+        Item.new('dummy' => { 'description' => [] })
       end
 
       def initialize(item_wrapper)

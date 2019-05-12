@@ -15,7 +15,7 @@ class LmcAccountTest < ::Minitest::Test
   def teardown
     instance = LMC::Cloud.instance
     instance.auth_for_account @orga
-    instance.get_accounts_objects.select {|a| [RENAME_NEW_NAME, RENAME_ACCOUNT_NAME].include? a.name}.each do |a|
+    instance.get_accounts_objects.select { |a| [RENAME_NEW_NAME, RENAME_ACCOUNT_NAME].include? a.name }.each do |a|
       a.delete!
     end
   end
@@ -31,7 +31,7 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_getting_account_by_name
     cloud = LMC::Cloud.instance
-    account_from_lst = cloud.get_accounts_objects.find {|a| a.name == TEST_ORGA}
+    account_from_lst = cloud.get_accounts_objects.find { |a| a.name == TEST_ORGA }
     account = LMC::Account.get_by_name account_from_lst.name
     assert_instance_of LMC::Account, account
     assert account_from_lst.id == account.id
@@ -39,7 +39,7 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_getting_account_by_uuid_or_name
     cloud = LMC::Cloud.instance
-    account_from_list = cloud.get_accounts_objects.find {|a| a.name == TEST_ORGA}
+    account_from_list = cloud.get_accounts_objects.find { |a| a.name == TEST_ORGA }
     account_by_name = LMC::Account.get_by_uuid_or_name account_from_list.name
     account_by_uuid = LMC::Account.get_by_uuid_or_name account_from_list.id
     assert_instance_of LMC::Account, account_by_uuid
@@ -69,7 +69,7 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_account_exists
     good = LMC::Account.get_by_name TEST_ORGA
-    bad = LMC::Account.new(nil, {name: 'foobar'})
+    bad = LMC::Account.new(nil, name: 'foobar')
     assert good.exists?
     refute bad.exists?
   end
@@ -95,9 +95,9 @@ class LmcAccountTest < ::Minitest::Test
     mock_lmc.expect :auth_for_accounts, nil, [Array]
     mock_lmc.expect :post, post_response, [Array, LMC::Account]
     parent_account = Fixtures.test_account Fixtures.mock_lmc
-    account = LMC::Account.new(mock_lmc, {'name' => __method__.to_s,
+    account = LMC::Account.new(mock_lmc,  'name' => __method__.to_s,
                                           'type' => 'PROJECT',
-                                          'parent' => parent_account.id})
+                                          'parent' => parent_account.id )
     account.save
     refute_nil account.id
     assert_mock mock_lmc
@@ -113,9 +113,9 @@ class LmcAccountTest < ::Minitest::Test
     end
     fail unless testaccount.nil?
     orga = LMC::Account.get_by_name TEST_ORGA
-    account = LMC::Account.new(LMC::Cloud.instance, {'name' => unique_name,
+    account = LMC::Account.new(LMC::Cloud.instance,  'name' => unique_name,
                                                      'type' => 'PROJECT',
-                                                     'parent' => orga.id})
+                                                     'parent' => orga.id )
     account.save
     assert account.delete!
     check_deleted = assert_raises RuntimeError, "Account #{account} not deleted" do
@@ -133,7 +133,7 @@ class LmcAccountTest < ::Minitest::Test
   end
 
   def test_account_renaming
-    @rename_account = LMC::Account.new(LMC::Cloud.instance, {'parent' => @orga.id, 'type' => 'PROJECT', 'name' => RENAME_ACCOUNT_NAME})
+    @rename_account = LMC::Account.new(LMC::Cloud.instance, 'parent' => @orga.id, 'type' => 'PROJECT', 'name' => RENAME_ACCOUNT_NAME)
     @rename_account.save
     pre = LMC::Account.get_by_name RENAME_ACCOUNT_NAME
     pre.name = RENAME_NEW_NAME
@@ -169,7 +169,7 @@ class LmcAccountTest < ::Minitest::Test
                                   '31FF009A-DC34-4C5B-827F-076DA590EAEF',
                                   'authorities',
                                   '36D88B55-913C-4DA8-8C64-A42A7C465A8D']]
-    account = LMC::Account.new(mock_cloud, {'id' => '31FF009A-DC34-4C5B-827F-076DA590EAEF'})
+    account = LMC::Account.new(mock_cloud, 'id' => '31FF009A-DC34-4C5B-827F-076DA590EAEF')
     account.authority '36D88B55-913C-4DA8-8C64-A42A7C465A8D'
     assert mock_cloud.verify
   end
@@ -177,8 +177,8 @@ class LmcAccountTest < ::Minitest::Test
   def test_duplicate_account_names
     name = 'heinz'
     cloud = MiniTest::Mock.new
-    accounts = [LMC::Account.new(nil, {'name' => name}),
-                LMC::Account.new(nil, {'name' => name})]
+    accounts = [LMC::Account.new(nil, 'name' => name),
+                LMC::Account.new(nil, 'name' => name)]
     cloud.expect :call, accounts, []
     e = assert_raises RuntimeError do
       LMC::Cloud.instance.stub :get_accounts_objects, cloud do

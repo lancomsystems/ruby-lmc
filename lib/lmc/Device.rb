@@ -2,7 +2,7 @@
 
 module LMC
   class Device
-    attr_reader :id, :name, :model, :serial, :heartbeatstate, :cloud, :account
+    attr_reader :id, :name, :model, :serial, :heartbeatstate, :cloud, :account, :status
 
     def initialize(data)
       @id = data['id']
@@ -22,7 +22,7 @@ module LMC
     end
 
     def get_monitor_widgets(widget_item_ids)
-      @cloud.get ['cloud-service-monitoring', @account.id, 'devices', @id, 'monitordata'], { :widgetItemIds => widget_item_ids.join(',') }
+      @cloud.get ['cloud-service-monitoring', @account.id, 'devices', @id, 'monitordata'], :widgetItemIds => widget_item_ids.join(',')
     end
 
     def self.get_for_account(account)
@@ -63,7 +63,7 @@ module LMC
     private
 
     def get_config_state
-      reply = @cloud.get ['cloud-service-config', 'configdevice', 'accounts', @account.id, 'state'], { 'deviceIds' => @id }
+      reply = @cloud.get ['cloud-service-config', 'configdevice', 'accounts', @account.id, 'state'], 'deviceIds' => @id
       if reply.code == 200
         #            binding.pry
         DeviceConfigState.new reply.body[@id]

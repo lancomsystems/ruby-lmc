@@ -1,2 +1,4 @@
 Layout/IndentHash:
   IndentationWidth: 4
+Metrics/LineLength:
+  Max: 110

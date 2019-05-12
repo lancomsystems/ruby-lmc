@@ -8,8 +8,8 @@ class LmcUserTest < Minitest::Test
   @@newpass = "Password-#{@@currentmillis.to_s}"
 
   def teardown
-    user = LMC::User.new({'email' => @@credentials.email,
-                          'password' => @@credentials.password})
+    user = LMC::User.new( 'email' => @@credentials.email,
+                          'password' => @@credentials.password )
     LMC::Cloud.stub :instance, @@changecloud do
       begin
         user.update @@newpass
@@ -20,7 +20,7 @@ class LmcUserTest < Minitest::Test
   end
 
   def test_user_pw_change
-    user = LMC::User.new({'email' => @@credentials.email, 'password' => @@newpass})
+    user = LMC::User.new('email' => @@credentials.email, 'password' => @@newpass)
     assert_equal @@credentials.email, user.email
     LMC::Cloud.stub :instance, @@changecloud do
       result = user.update @@credentials.password
@@ -29,7 +29,7 @@ class LmcUserTest < Minitest::Test
   end
 
   def test_user_pw_change_fail
-    user = LMC::User.new({'email' => @@credentials.email, 'password' => 'short'})
+    user = LMC::User.new('email' => @@credentials.email, 'password' => 'short')
     assert_equal @@credentials.email, user.email
     LMC::Cloud.stub :instance, @@changecloud do
       ex = assert_raises RuntimeError do
@@ -40,7 +40,7 @@ class LmcUserTest < Minitest::Test
   end
 
   def test_user_pw_reset
-    user = LMC::User.new({'email' => @@credentials.email})
+    user = LMC::User.new('email' => @@credentials.email)
     user.request_pw_reset
   end
 end

@@ -35,7 +35,7 @@ module Fixtures
     LMC::Account.new cloud, 'id' => '8c99dceb-e7cc-4ad2-9df6-8790625e51ee'
   end
 
-  def self.test_device(account)
+  def self.test_device(account = test_account(mock_lmc))
     LMC::Device.new 'id' => 'a5d83d9d-9029-4227-9a60-09f4724bb2af',
                     'account' => account, 'status' => {}
   end

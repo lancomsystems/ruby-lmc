@@ -45,7 +45,7 @@ module LMC
 
     def descriptive_confighash
       item_map = dscui.item_by_id_map
-      confighash.map {|k, v|
+      confighash.map { |k, v|
         [item_map[k].description, v]
       }.to_h
     end
@@ -75,8 +75,8 @@ module LMC
           col_ids = value['colIds']
           if rows.length > 0
             result += "<#{key}>\n"
-            rows.each_with_index {|row, index|
-              row.each_with_index {|col, col_index|
+            rows.each_with_index { |row, index|
+              row.each_with_index { |col, col_index|
                 result += "(#{key}.#{index + 1}.#{col_ids[col_index]}) = #{col}\n"}
             }
           end
@@ -108,7 +108,7 @@ module LMC
     end
 
     def lcf_footer
-      '[END: LCF;]'
+      "[END: LCF;]\n"
     end
 
     def response

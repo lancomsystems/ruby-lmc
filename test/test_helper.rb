@@ -37,7 +37,11 @@ module Fixtures
 
   def self.test_device(account = test_account(mock_lmc))
     LMC::Device.new 'id' => 'a5d83d9d-9029-4227-9a60-09f4724bb2af',
-                    'account' => account, 'status' => {}
+                    'account' => account, 'status' => {
+            'name' => 'Fixture AP',
+            'serial' => '999999999999999999999999',
+            'fwBuild' => '232', 'fwMinor' => 30, 'fwMajor' => 10
+        }
   end
 
   def self.test_response_json(body_json_string, code = 200, headers = [])

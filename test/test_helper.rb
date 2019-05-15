@@ -27,8 +27,12 @@ require 'minitest/reporters'
 MiniTest::Reporters.use!
 
 module Fixtures
-  def self.mock_lmc
-    Minitest::Mock.new
+  def self.mock_lmc(expects = [])
+    mock = Minitest::Mock.new
+    expects.each do |expect_args|
+      mock.expect *expect_args
+    end
+    mock
   end
 
   def self.test_account(cloud)
@@ -40,8 +44,35 @@ module Fixtures
                     'account' => account, 'status' => {
             'name' => 'Fixture AP',
             'serial' => '999999999999999999999999',
+            'model' => 'LANCOM L-1302acn dual Wireless',
+            'hwMask' => 201326594,
+            'fwLabel' => '10.20.0448 / 13.04.2019',
             'fwBuild' => '232', 'fwMinor' => 30, 'fwMajor' => 10
         }
+  end
+
+  def self.configdevice_state_response
+    json = '{"a5d83d9d-9029-4227-9a60-09f4724bb2af": {
+        "configState": "STORED",
+        "lastConfigChange": "2019-04-14T23:13:43.863+02:00",
+        "communicationState": "IDLE",
+        "communicationSince": "2018-10-12T15:22:07.322+02:00",
+        "updateState": "OUTDATED",
+        "outdatedCause": "CHANGED",
+        "currentDeviceType": "{\"type\":\"LANCOM L-1302acn dual Wireless\",\"version\":\"10.20.0448\",\"hardware\":201326594,\"features\":[4,14,15,43],\"registered\":[4,14,15,43]}",
+        "conversionPending": false,
+        "siteRegistrationPending": false
+    }
+}'
+    test_response_json json
+  end
+
+  def self.test_config
+    mock_lmc = Fixtures.mock_lmc [
+                                     [:get, Fixtures.configdevice_state_response, [Array, Hash]]
+                                 ]
+    device = Fixtures.test_device Fixtures.test_account mock_lmc
+    device.config
   end
 
   def self.test_response_json(body_json_string, code = 200, headers = [])

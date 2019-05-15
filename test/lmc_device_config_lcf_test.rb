@@ -24,8 +24,8 @@ class LmcDeviceConfigLCFTest < Minitest::Test
     }'
 
     expected_lcf = "(LMC Configuration of 'Fixture AP' at 1970-01-01 01:00:00 +0100 via ruby-lmc #{LMC::VERSION})
-() (0x0020c11c,IDs:2,3,4,8,e,f//e08543ca,15,2b;0x0c0000d3)
-[] v10.30.0232
+(10.20.0448 / 13.04.2019) (0x0000c010,IDs:4,e,f,2b;0x0c000002)
+[LANCOM L-1302acn dual Wireless] v10.30.0232
 [TYPE: LCF; VERSION: 1.00; HASHTYPE: none;]
 1.2.1 = l-1302
 <1.2.9.27>
@@ -35,13 +35,23 @@ class LmcDeviceConfigLCFTest < Minitest::Test
 [END: LCF;]
 "
 
-    device = Fixtures.test_device
-    config = device.config
+    config = Fixtures.test_config
     config.stub :items, items do
       Time.stub :now, Time.at(0) do
         assert_equal expected_lcf, config.lcf
       end
     end
 
+  end
+
+  def test_error
+    items = { '1.2' => [0] }
+    config = Fixtures.test_config
+    ex = assert_raises RuntimeError do
+      config.stub :items, items do
+        config.lcf
+      end
+    end
+    assert_match /Unexpected value in config items: Array/, ex.message
   end
 end

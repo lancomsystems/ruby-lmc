@@ -60,8 +60,14 @@ module LMC
       'DEVICE'
     end
 
+    def hwmask_hex
+      format format '%#010x', status['hwMask']
+    end
+
     private
 
+    ##
+    # TODO: This functionality is now duplicated in the DeviceConfig class and it's worse there.
     def get_config_state
       reply = @cloud.get ['cloud-service-config', 'configdevice', 'accounts', @account.id, 'state'], 'deviceIds' => @id
       if reply.code == 200

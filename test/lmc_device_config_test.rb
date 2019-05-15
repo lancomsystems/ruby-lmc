@@ -24,12 +24,13 @@ class LmcDeviceConfigTest < Minitest::Test
 
     @dscui_request_args = [['cloud-service-config', 'configdevice', 'accounts', '4eec92c3-3dfb-4445-800b-b9e5822e963a',
                             'devices', '8d7ff9bb-1d4c-4374-acb1-a0680ab7d85a', 'dscui']]
-    @item_by_id_map = { '2.4' => LMC::DeviceDSCUi::Item.new( 'some_type' => { 'id' => '2.4',
-                                                                            'description' => ['some.name'] } ) }
+    @item_by_id_map = { '2.4' => LMC::DeviceDSCUi::Item.new('some_type' => { 'id' => '2.4',
+                                                                           'description' => ['some.name'] }) }
   end
 
   def test_config_direct
     mock_lmc = Minitest::Mock.new
+    mock_lmc.expect :get, Fixtures.test_response({}), [Array, Hash]
     mock_lmc.expect :get, @config_response, @config_request_args
 
     config = LMC::DeviceConfig.new(mock_lmc, @account, @device)
@@ -39,6 +40,7 @@ class LmcDeviceConfigTest < Minitest::Test
 
   def test_config_ticket
     mock_lmc = Minitest::Mock.new
+    mock_lmc.expect :get, Fixtures.test_response({}), [Array, Hash]
     mock_lmc.expect :get, LMC::LMCResponse.new(@ticket_response),
                     @config_request_args
     mock_lmc.expect :get, @config_response,
@@ -53,6 +55,7 @@ class LmcDeviceConfigTest < Minitest::Test
 
   def test_config_timeout
     mock_lmc = Minitest::Mock.new
+    mock_lmc.expect :get, Fixtures.test_response({}), [Array, Hash]
     mock_lmc.expect :get, LMC::LMCResponse.new(@ticket_response),
                     [['cloud-service-config', 'configbuilder', 'accounts',
                       @account_id, 'devices', @device_id, 'ui']]
@@ -71,6 +74,7 @@ class LmcDeviceConfigTest < Minitest::Test
 
   def test_descriptive_confighash
     mock_lmc = MiniTest::Mock.new
+    mock_lmc.expect :get, Fixtures.test_response({}), [Array, Hash]
     mock_lmc.expect :get, @config_response, @config_request_args
     mock_dscui = MiniTest::Mock.new
     mock_dscui.expect :item_by_id_map, @item_by_id_map
@@ -90,6 +94,7 @@ class LmcDeviceConfigTest < Minitest::Test
 
   def test_dscui
     mock_lmc = MiniTest::Mock.new
+    mock_lmc.expect :get, Fixtures.test_response({}), [Array, Hash]
     mock_lmc.expect :get, @config_response, @config_request_args
     mock_account_lmc = MiniTest::Mock.new
     mock_account_lmc.expect :get, @config_response, @dscui_request_args
@@ -100,5 +105,33 @@ class LmcDeviceConfigTest < Minitest::Test
         assert_equal :called, result
       end
     end
+  end
+
+  def test_current_device_type
+    config = Fixtures.test_config
+    puts config.current_device_type.inspect
+    config.stub :state, nil do
+    end
+  end
+
+  def test_feature_mask
+    config = Fixtures.test_config
+    assert_equal '0x0000c010', config.feature_mask_lower32_hex
+    test_values = [
+        { expected: '0xffffffff', input: (0..31).to_a },
+        { expected: '0xffffffff', input: (0..37).to_a },
+        { expected: '0x00000000', input: [] },
+    ]
+    test_values.each do |tv|
+
+      config.stub :current_device_type, OpenStruct.new('features' => tv[:input]) do
+        assert_equal tv[:expected], config.feature_mask_lower32_hex
+      end
+    end
+  end
+
+  def test_feature_id_string
+    config = Fixtures.test_config
+    assert_equal 'IDs:4,e,f,2b', config.lcf_feature_id_string
   end
 end

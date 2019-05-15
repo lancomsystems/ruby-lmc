@@ -3,6 +3,8 @@
 module LMC
   # Represents a device config in LMC
   class DeviceConfig
+    attr_reader :state
+
     def url_configbuilder
       ['cloud-service-config', 'configbuilder', 'accounts',
        @account.id, 'devices', @device.id, 'ui']
@@ -19,6 +21,10 @@ module LMC
        @ticket_id]
     end
 
+    def url_state
+      %W(cloud-service-config configdevice accounts #{@account.id} state)
+    end
+
     # def url_stringtable
     #   ['cloud-service-config', 'configdsc', 'stringtable', dscui['stringtableId']]
     # end
@@ -29,6 +35,8 @@ module LMC
       @device = device
       @response = nil
       @ticket_id = nil
+      # state returns an object with each requested device id pointing to a state object.
+      @state = @cloud.get(url_state, deviceIds: @device.id.to_s).body[@device.id]
     end
 
     def configjson
@@ -81,23 +89,30 @@ module LMC
             }
           end
         else
-          result += "#{key} = #{value.class}\n"
+          raise 'Unexpected value in config items: ' + value.class.to_s
         end
       end
       result += lcf_footer
     end
 
-    private
+    def current_device_type
+      OpenStruct.new JSON.parse state['currentDeviceType']
+    end
 
     ##
-    # Produces lcf header
-    # TODO: Replace magic numbers, current ones are for l1302
-    def lcf_header
-      "(LMC Configuration of '#{@device.name}' at #{Time.now} via ruby-lmc #{LMC::VERSION})
-(#{@device.status['fwLabel']}) (0x0020c11c,IDs:2,3,4,8,e,f//e08543ca,15,2b;0x0c0000d3)
-[#{@device.model}] #{lcf_device_version}
-[TYPE: LCF; VERSION: 1.00; HASHTYPE: none;]
-"
+    # @return [String]
+    def feature_mask_lower32_hex
+      feature_mask = 0
+      lower_features = current_device_type.features.select { |feature| feature < 32 }
+      lower_features.each do |feature_pos|
+        feature = 2**feature_pos
+        feature_mask = feature_mask | feature
+      end
+      if feature_mask == 0
+        '0x00000000'
+      else
+        format '%#010x', feature_mask
+      end
     end
 
     def lcf_device_version
@@ -105,6 +120,35 @@ module LMC
       v += "#{@device.status['fwMajor']}."
       v += "#{@device.status['fwMinor']}."
       v + format('%04d', @device.status['fwBuild'])
+    end
+
+    ##
+    # Gives the feature IDs as a string like this: "IDs:2,3,f"
+    # @return [String]
+    def lcf_feature_id_string
+      hex_features = current_device_type.features.map { |feature| feature.to_s 16 }
+      "IDs:#{hex_features.join(',')}"
+    end
+
+    private
+
+    ##
+    # Produces lcf header
+    # @return [String]
+    def lcf_header
+      "(LMC Configuration of '#{@device.name}' at #{Time.now} via ruby-lmc #{LMC::VERSION})
+(#{@device.status['fwLabel']}) (#{lcf_feature_hw_string})
+[#{@device.model}] #{lcf_device_version}
+[TYPE: LCF; VERSION: 1.00; HASHTYPE: none;]
+"
+    end
+
+    ##
+    # Gives the feature mask, the feature IDs and the hardware mask as string for the lcf
+    # header like this: "0x0000c010,IDs:4,e,f//e0901447,2b;0x0c000002"
+    # @return [String]
+    def lcf_feature_hw_string
+      "#{feature_mask_lower32_hex},#{lcf_feature_id_string};#{@device.hwmask_hex}"
     end
 
     def lcf_footer

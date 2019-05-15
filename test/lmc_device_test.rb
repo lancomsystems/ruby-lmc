@@ -12,4 +12,15 @@ class LmcDeviceTest < Minitest::Test
     end
     assert_mock mock_initializer
   end
+
+  def test_hwmask_string
+    device = Fixtures.test_device
+    device.stub :status, 'hwMask' => 286335522 do
+      assert_equal '0x11112222', device.hwmask_hex
+    end
+    device.stub :status, 'hwMask' => 17 do
+      assert_equal '0x00000011', device.hwmask_hex
+    end
+
+  end
 end

@@ -3,37 +3,27 @@
 module LMC
   class Site
     attr_accessor :name
-    attr_reader :id, :account
+    attr_reader :id, :account, :subnet_group_id
 
     def initialize(data, account)
-      @cloud = Cloud.instance
+      @cloud = account.cloud
+      @cloud.auth_for_account account if account
+      @account = account
+      data = @cloud.get ['cloud-service-devices', 'accounts', @account.id, 'sites', data] if data.is_a? UUID
+
       @id = data['id']
       @name = data['name']
       @subnet_group_id = data['subnetGroupId']
-      @account = account
 
-      if @account
-        @cloud.auth_for_account @account
-      end
     end
 
     def to_s
       "#{@name}"
     end
 
-    def account=(account)
-      if @account == nil
-        @account = account
-        true
-      else
-        raise 'Cannot replace account for site'
-      end
-    end
-
     def configstates
       response = @cloud.get ['cloud-service-config', 'configsubnetgroup', 'accounts', @account.id, 'subnetgroups', @subnet_group_id, 'updatestates']
-      states = LMC::Configstates.new response.body
-      states
+      LMC::Configstates.new response.body
     end
   end
 end

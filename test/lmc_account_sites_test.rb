@@ -12,13 +12,15 @@ class LmcAccountSitesTest < Minitest::Test
   end
 
   def test_account_with_sites
-    mock_response = Minitest::Mock.new
-    mock_response.expect :body, [{ 'id' => '179be8ed-b522-44d5-ad5f-b03f25ce08d9', 'name' => 'testsite',
-                                  'subNetGroupId' => '0b27261c-227d-4e28-8b87-35b5594ea278' }]
-    LMC::Cloud.instance.stub :get, mock_response do
-      account = LMC::Account.new LMC::Cloud.instance, 'id' => 'e8ab2250-8d79-442b-a13c-4144e0237b3e'
+    lmc = Fixtures.mock_lmc
+    lmc.expect :auth_for_accounts, nil, [Object]
+    site_hash = { 'id' => '179be8ed-b522-44d5-ad5f-b03f25ce08d9', 'name' => 'testsite',
+                                   'subnetGroupId' => '0b27261c-227d-4e28-8b87-35b5594ea278' }
+    lmc.expect :get, Fixtures.test_response(['179be8ed-b522-44d5-ad5f-b03f25ce08d9']), [Array, Object]
+    lmc.expect :auth_for_account, nil, [Object]
+    lmc.expect :get, Fixtures.test_response(site_hash), [Array]
+      account = LMC::Account.new lmc, 'id' => 'e8ab2250-8d79-442b-a13c-4144e0237b3e'
       sites = account.sites
       refute_empty sites
-    end
   end
 end

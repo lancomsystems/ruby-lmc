@@ -143,7 +143,6 @@ module LMC
       if account_ids != @last_authorized_account_ids
         begin
           reply = post(['cloud-service-auth', 'auth'], name: @user, password: @password, accountIds: account_ids, termsOfUse: tos)
-          puts 'authorize reply ' + reply.inspect if Cloud.debug
           @last_authorized_account_ids = account_ids
           @auth_token = reply
           @auth_ok = true
@@ -183,15 +182,14 @@ module LMC
         resp = RestClient::Request.execute internal_args
         return LMCResponse.new(resp)
       rescue RestClient::ExceptionWithResponse => e
-        print_exception e if Cloud.debug
+        if Cloud.debug
+          puts 'EXCEPTION: ' + e.to_s
+          puts 'EX.response: ' + e.response.to_s
+          puts JSON.parse(e.response)['message']
+        end
         raise e
       end
     end
-
-    def print_exception(execption)
-      puts 'EXCEPTION: ' + execption.to_s
-      puts 'EX.response: ' + execption.response.to_s
-      puts JSON.parse(execption.response)['message']
-    end
   end
 end
+

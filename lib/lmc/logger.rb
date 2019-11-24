@@ -5,8 +5,15 @@ module LMC
   class Logger < ::Logger
     @cloud = nil
     attr_accessor :cloud
+    @@header_token_re = /"Authorization"=>"Bearer ([\S.]*)"/
     def <<(line)
-      super line.gsub @cloud.password, '********'
+      value_found = @@header_token_re.match line
+      if value_found
+        line.gsub! value_found[1], 'TOKEN REDACTED'
+      end
+      line.gsub! @cloud.password, '********'
+      super
     end
   end
 end
+

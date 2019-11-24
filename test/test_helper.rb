@@ -75,12 +75,16 @@ module Fixtures
     device.config
   end
 
-  def self.test_response_json(body_json_string, code = 200, headers = [])
+  def self.test_restclient_response(body_json_string, code = 200, headers = [])
     mock = Minitest::Mock.new
     mock.expect :bytesize, body_json_string.bytesize
     mock.expect :body, body_json_string
     mock.expect :code, code
     mock.expect :headers, headers
+  end
+
+  def self.test_response_json(body_json_string, code = 200, headers = [])
+    mock = test_restclient_response body_json_string, code, headers
     LMC::LMCResponse.new(mock)
   end
 
@@ -89,3 +93,4 @@ module Fixtures
     test_response_json body_json_string, code, headers
   end
 end
+

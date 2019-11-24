@@ -27,3 +27,4 @@ class LMC::Tests::LmcTest < Minitest::Test
   #  end
   # end
 end
+

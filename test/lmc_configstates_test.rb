@@ -24,3 +24,4 @@ class LmcConfigstatesTest < Minitest::Test
     assert_equal empty_states.outdated, configstates.outdated
   end
 end
+

@@ -24,3 +24,4 @@ class LmcAccountSitesTest < Minitest::Test
       refute_empty sites
   end
 end
+

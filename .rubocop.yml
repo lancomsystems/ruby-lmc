@@ -1,3 +1,5 @@
+Layout/TrailingBlankLines:
+  EnforcedStyle: final_blank_line
 Layout/IndentFirstHashElement:
   IndentationWidth: 4
 Metrics/LineLength:

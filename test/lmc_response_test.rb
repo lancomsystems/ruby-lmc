@@ -54,3 +54,4 @@ class LmcResponseTest < Minitest::Test
     assert response.body
   end
 end
+

@@ -12,3 +12,4 @@ class LmcMembershipTest < MiniTest::Test
     assert mock_lmc.verify
   end
 end
+

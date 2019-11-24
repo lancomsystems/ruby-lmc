@@ -14,3 +14,4 @@ module LMC::JSONAble
     end
   end
 end
+

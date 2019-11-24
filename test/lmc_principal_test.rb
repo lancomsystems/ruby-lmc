@@ -44,3 +44,4 @@ class LmcPrincipalTest < Minitest::Test
     assert_equal '{"name":"foobar","type":"test","password":"secret"}', @principal.to_json
   end
 end
+

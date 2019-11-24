@@ -135,3 +135,4 @@ class LmcDeviceConfigTest < Minitest::Test
     assert_equal 'IDs:4,e,f,2b', config.lcf_feature_id_string
   end
 end
+

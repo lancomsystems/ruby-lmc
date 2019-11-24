@@ -42,3 +42,4 @@ class LmcAccountInviteTest < Minitest::Test
     @new_orga_member_id = response.body.id
   end
 end
+

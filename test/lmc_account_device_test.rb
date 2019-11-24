@@ -12,3 +12,4 @@ class LmcAccountDeviceTest < Minitest::Test
     assert mock_static_device_method.verify
   end
 end
+

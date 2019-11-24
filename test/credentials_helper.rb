@@ -11,3 +11,4 @@ module LMC::Tests::CredentialsHelper
     RecursiveOpenStruct.new(YAML.load_file(credentials_file))
   end
 end
+

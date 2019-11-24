@@ -132,7 +132,7 @@ module LMC
       # private clouds can not have sites
       return [] if @type == 'PRIVATE_CLOUD'
       @cloud.auth_for_accounts([id])
-      response = @cloud.get ['cloud-service-devices', 'accounts', id, 'sites'], {:select => :id}
+      response = @cloud.get ['cloud-service-devices', 'accounts', id, 'sites'], :select => :id
       response.body.map { |data|
         Site.new(UUID.new(data), self)
       }
@@ -178,3 +178,4 @@ module LMC
     end
   end
 end
+

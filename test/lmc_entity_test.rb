@@ -7,3 +7,4 @@ class LmcEntityTest < Minitest::Test
         assert_equal ent.class, ent['class']
     end
 end
+

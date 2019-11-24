@@ -55,3 +55,4 @@ class LmcDeviceConfigLCFTest < Minitest::Test
     assert_match /Unexpected value in config items: Array/, ex.message
   end
 end
+

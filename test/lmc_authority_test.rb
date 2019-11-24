@@ -46,3 +46,4 @@ class LmcAuthorityTest < ::Minitest::Test
     end
   end
 end
+

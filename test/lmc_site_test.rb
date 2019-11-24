@@ -6,7 +6,7 @@ class LmcSiteTest < Minitest::Test
     @lmc = Fixtures.mock_lmc
     @account = Fixtures.test_account @lmc
     @lmc.expect :auth_for_account, nil, [@account]
-    @site_hash = {'id' => SecureRandom.uuid, 'name' => "foosite", 'subnetGroupId' => 1}
+    @site_hash = { 'id' => SecureRandom.uuid, 'name' => 'foosite', 'subnetGroupId' => 1 }
   end
 
   def test_site_from_hash
@@ -40,3 +40,4 @@ class LmcSiteTest < Minitest::Test
     assert_mock @lmc
   end
 end
+

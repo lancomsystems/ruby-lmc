@@ -24,3 +24,4 @@ class LmcDeviceTest < Minitest::Test
 
   end
 end
+

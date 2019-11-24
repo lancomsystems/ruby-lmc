@@ -13,3 +13,4 @@ class LmcAuthActionTest < Minitest::Test
     assert mock_cloud.verify
   end
 end
+

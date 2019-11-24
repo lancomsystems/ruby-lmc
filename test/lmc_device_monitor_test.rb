@@ -15,3 +15,4 @@ class LmcDeviceMonitorTest < Minitest::Test
 
   end
 end
+

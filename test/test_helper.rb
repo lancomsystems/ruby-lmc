@@ -35,7 +35,7 @@ module Fixtures
     mock
   end
 
-  def self.test_account(cloud)
+  def self.test_account(cloud=Fixtures.mock_lmc)
     LMC::Account.new cloud, 'id' => '8c99dceb-e7cc-4ad2-9df6-8790625e51ee'
   end
 

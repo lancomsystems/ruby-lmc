@@ -150,6 +150,21 @@ class LmcAccountTest < ::Minitest::Test
     refute_empty members
   end
 
+  def test_members_by_empty_name
+    assert_raises RuntimeError do
+      Fixtures.test_account(Fixtures.mock_lmc).find_member_by_name nil
+    end
+  end
+
+  def test_member_by_nonexistant_name
+    account = Fixtures.test_account
+    assert_raises RuntimeError do
+      account.stub :members, [] do
+        account.find_member_by_name 'nonexistant'
+      end
+    end
+  end
+
   def test_account_children
     orga = LMC::Account.get_by_name TEST_ORGA
     children = orga.children

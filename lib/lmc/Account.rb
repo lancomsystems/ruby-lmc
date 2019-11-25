@@ -56,8 +56,8 @@ module LMC
         delete_action = AuthAction.new @cloud
         delete_action.type = AuthAction::ACCOUNT_DELETE
         delete_action.name = Cloud.user
-        delete_action.data = { 'password' => Cloud.password,
-                              'accountId' => @id }
+        delete_action.data = {'password' => Cloud.password,
+                              'accountId' => @id}
         delete_action.post
         @id = nil
         true
@@ -83,7 +83,14 @@ module LMC
     end
 
     def find_member_by_name(name)
-      members.find { |m| m.name == name }
+      if name.nil?
+        raise 'No member name given'
+      end
+      member = members.find {|m| m.name == name}
+      unless member
+        raise "Member named #{name} not found in account #{self}"
+      end
+      member
     end
 
     # def update_member(principal_id, data)
@@ -118,7 +125,7 @@ module LMC
     def children
       @cloud.auth_for_accounts([id, ROOT_ACCOUNT_UUID])
       response = @cloud.get ['cloud-service-auth', 'accounts', id, 'children']
-      response.map { |child| Account.new @cloud, child }
+      response.map {|child| Account.new @cloud, child}
     end
 
     def logs
@@ -133,7 +140,7 @@ module LMC
       return [] if @type == 'PRIVATE_CLOUD'
       @cloud.auth_for_accounts([id])
       response = @cloud.get ['cloud-service-devices', 'accounts', id, 'sites'], :select => :id
-      response.body.map { |data|
+      response.body.map {|data|
         Site.new(UUID.new(data), self)
       }
     end

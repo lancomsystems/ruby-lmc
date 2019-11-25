@@ -4,3 +4,5 @@ Layout/IndentFirstHashElement:
   IndentationWidth: 4
 Metrics/LineLength:
   Max: 110
+Style/IfUnlessModifier:
+  Enabled: false

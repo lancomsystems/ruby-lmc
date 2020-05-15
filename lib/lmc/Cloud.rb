@@ -93,12 +93,13 @@ module LMC
       execute_request args
     end
 
-    def delete(path, body_object = nil)
+    def delete(path, params = nil)
+      prepared_headers = headers
+      prepared_headers[:params] = params
       args = {
           :method => :delete,
           :url => build_url(path),
-          :payload => body_object.to_json,
-          :headers => headers
+          :headers => prepared_headers
       }
       execute_request args
     end

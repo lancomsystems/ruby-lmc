@@ -107,13 +107,6 @@ class LmcDeviceConfigTest < Minitest::Test
     end
   end
 
-  def test_current_device_type
-    config = Fixtures.test_config
-    puts config.current_device_type.inspect
-    config.stub :state, nil do
-    end
-  end
-
   def test_feature_mask
     config = Fixtures.test_config
     assert_equal '0x0000c010', config.feature_mask_lower32_hex

@@ -52,7 +52,7 @@ class LmcDeviceConfigLCFTest < Minitest::Test
         config.lcf
       end
     end
-    assert_match /Unexpected value in config items: Array/, ex.message
+    assert_match(/Unexpected value in config items: Array/, ex.message)
   end
 end
 

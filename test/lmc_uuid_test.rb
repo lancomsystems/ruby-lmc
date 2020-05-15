@@ -11,7 +11,7 @@ class LmcUUIDTest < Minitest::Test
   def test_invalid_string
     invalid_string = 'foobar'
     assert_raises Exception do
-      uuid = LMC::UUID.new invalid_string
+      LMC::UUID.new invalid_string
     end
   end
 end

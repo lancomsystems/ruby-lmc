@@ -30,7 +30,7 @@ module Fixtures
   def self.mock_lmc(expects = [])
     mock = Minitest::Mock.new
     expects.each do |expect_args|
-      mock.expect *expect_args
+      mock.expect(*expect_args)
     end
     mock
   end

@@ -56,12 +56,12 @@ class LmcAccountTest < ::Minitest::Test
 
   def test_getting_account_by_invalid_name
     begin
-      nonexistant_account = LMC::Account.get_by_uuid_or_name 'Nonexistant'
+      LMC::Account.get_by_uuid_or_name 'Nonexistant'
     rescue RuntimeError => e
       assert_equal 'Did not find account', e.message
     end
     begin
-      nonexistant_account = LMC::Account.get_by_uuid_or_name 'Nonexistant account with space'
+      LMC::Account.get_by_uuid_or_name 'Nonexistant account with space'
     rescue RuntimeError => e
       assert_equal 'Did not find account', e.message
     end

@@ -172,16 +172,17 @@ module LMC
     end
 
     def redeem_ticket(tries)
+      wait_seconds = 0.5
       attempts = 1
       until @response
-        raise 'Too many attempts' if attempts > tries
+        raise "Timeout waiting for config (#{attempts * wait_seconds}s)" if attempts > tries
         attempts += 1
         body = @cloud.get(url_ticket).body
         unless body.respond_to? :ticketId
           @ticket_id = nil
           @response = body
         end
-        sleep 0.5
+        sleep wait_seconds * attempts
       end
     end
 

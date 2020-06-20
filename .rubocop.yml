@@ -1,8 +1,8 @@
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   EnforcedStyle: final_blank_line
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   IndentationWidth: 4
-Metrics/LineLength:
+Layout/LineLength:
   Max: 110
 Style/IfUnlessModifier:
   Enabled: false

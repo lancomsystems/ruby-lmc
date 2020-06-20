@@ -15,7 +15,7 @@ class LmcCloudTest < Minitest::Test
   end
 
   def test_that_account_failures_are_raised
-    mock_response = Fixtures.test_response({'message' => 'failed'}, 500)
+    mock_response = Fixtures.test_response({ 'message' => 'failed' }, 500)
     @lmc.stub :get, mock_response do
       ex = assert_raises RuntimeError do
         @lmc.get_accounts_objects
@@ -37,7 +37,7 @@ class LmcCloudTest < Minitest::Test
   end
 
   def test_put
-    fake_execute = lambda {|r|
+    fake_execute = lambda { |r|
       return OpenStruct.new(:bytesize => 0)
     }
     c = LMC::Cloud.instance
@@ -54,13 +54,13 @@ class LmcCloudTest < Minitest::Test
     fake_execute.expect :call,
                         Fixtures.test_restclient_response('') do |args|
       assert_equal args[:method], :delete
-      assert_equal args[:url], "https://example.com/foo"
-      assert_equal args[:headers], {:content_type=>"application/json",
-                                    :params => {:ids => ["12", "23"]}}
+      assert_equal args[:url], 'https://example.com/foo'
+      assert_equal args[:headers], { :content_type => 'application/json',
+                                    :params => { :ids => ['12', '23'] } }
     end
     @lmc.stub :execute_request, fake_execute do
       @lmc.delete ['foo']
-      @lmc.delete ['foo'], {ids: ["12", "23"]}
+      @lmc.delete ['foo'], { ids: ['12', '23'] }
     end
     assert fake_execute.verify
   end
@@ -79,7 +79,7 @@ class LmcCloudTest < Minitest::Test
   end
 
   def test_exception_logging
-    fake_execute = lambda {|_r|
+    fake_execute = lambda { |_r|
       ex = RestClient::ExceptionWithResponse.new '{"message": "FAIL"}', 500
       ex.message = 'buh'
       raise ex

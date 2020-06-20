@@ -21,15 +21,16 @@ RuboCop::RakeTask.new(:autocop) do |t|
       'Layout/SpaceAroundOperators',
       'Layout/SpaceInsideBlockBraces',
       'Layout/SpaceInsideHashLiteralBraces',
-      'Layout/TrailingBlankLines',
-      'Style/BracesAroundHashParameters',
+      'Layout/TrailingEmptyLines',
       'Style/CommentAnnotation',
       'Style/FrozenStringLiteralComment',
       'Style/MethodDefParentheses',
       'Style/RedundantSelf',
       'Style/RedundantReturn',
       'Style/StringLiterals',
-      'Style/StringLiteralsInInterpolation']
+      'Style/StringLiteralsInInterpolation',
+      'Style/StabbyLambdaParentheses',
+  ]
   t.options = ['--only', autofix.join(','), '--auto-correct', 'lib', 'test', 'Rakefile', 'lmc.gemspec']
 end
 task :default => :test

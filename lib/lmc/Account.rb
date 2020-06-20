@@ -168,6 +168,10 @@ module LMC
       "#{name}"
     end
 
+    def summary
+      "\"#{@name}\" (#{@type}) ID: #{@id}"
+    end
+
     private
 
     ## should be put into entity or such

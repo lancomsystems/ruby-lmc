@@ -202,5 +202,11 @@ class LmcAccountTest < ::Minitest::Test
     end
     assert_equal 'Account name not unique', e.message
   end
+
+  def test_account_summary
+    account = Fixtures.test_account
+    summary = account.summary
+    assert_equal '"Some lame test account" () ID: 8c99dceb-e7cc-4ad2-9df6-8790625e51ee', summary
+  end
 end
 

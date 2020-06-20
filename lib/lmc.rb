@@ -23,7 +23,7 @@ Dir.glob(File.expand_path('../lmc/*.rb', __FILE__)).each do |file|
   require file
 end
 
-['exceptions', 'auth', 'config', 'monitoring'].each do |folder|
+['exceptions', 'auth', 'config', 'monitoring', 'preferences'].each do |folder|
   Dir.glob(File.expand_path("../lmc/#{folder}/*.rb", __FILE__)).each do |file|
     require file
   end

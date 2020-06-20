@@ -63,6 +63,11 @@ module LMC
       post ['cloud-service-auth', 'accounts', account_id, 'members'], body
     end
 
+    # @param section Array of String to indicate section to access. Example: ['principal', 'self', 'ui']
+    def preferences(section)
+      LMC::Preferences.new cloud: self, section: section
+    end
+
     def get(path, params = nil)
       prepared_headers = headers
       prepared_headers[:params] = params
@@ -74,21 +79,26 @@ module LMC
       execute_request args
     end
 
-    def put(path, body_object)
+    def put(path, body_object, params = nil)
+      prepared_headers = headers
+      prepared_headers[:params] = params
       args = {
           :method => :put,
           :url => build_url(path),
-          :payload => body_object.to_json
-
+          :payload => body_object.to_json,
+          :headers => prepared_headers
       }
       execute_request args
     end
 
-    def post(path, body_object)
+    def post(path, body_object, params=nil )
+      prepared_headers = headers
+      prepared_headers[:params] = params
       args = {
           :method => :post,
           :url => build_url(path),
-          :payload => body_object.to_json
+          :payload => body_object.to_json,
+          :headers => prepared_headers
       }
       execute_request args
     end
@@ -181,7 +191,7 @@ module LMC
       internal_args.merge! args
       begin
         resp = RestClient::Request.execute internal_args
-        return LMCResponse.new(resp)
+        LMCResponse.new(resp)
       rescue RestClient::ExceptionWithResponse => e
         if Cloud.debug
           puts 'EXCEPTION: ' + e.to_s

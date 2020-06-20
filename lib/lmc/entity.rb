@@ -5,9 +5,9 @@ module LMC
     def self.get_by_uuid_or_name(term)
       raise 'Missing argument' if term.nil?
       begin
-        return get_by_uuid term
+        get_by_uuid term
       rescue RestClient::BadRequest, URI::InvalidURIError
-        return get_by_name term
+        get_by_name term
       end
     end
 

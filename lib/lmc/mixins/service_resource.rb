@@ -9,9 +9,6 @@ module LMC
         end
       end
       klass.class_exec do
-        def methodtest
-          puts("cloud-service-#{service_name}")
-        end
 
         # method that wraps attr_accessor to keep the defined attrs in a class instance var for serializing
         def self.resource_attrs(*attrs)
@@ -24,10 +21,6 @@ module LMC
           @resource_attributes
         end
       end
-    end
-
-    def method_on_instance_of_class
-      puts("cloud-service-#{service_name} #{inspect}, #{@cloud}")
     end
 
     def collection_path

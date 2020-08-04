@@ -166,10 +166,23 @@ class LmcAccountTest < ::Minitest::Test
   end
 
   def test_account_children
-    orga = LMC::Account.get_by_name TEST_ORGA
+    orga = Fixtures.test_orga
+    child_response = Fixtures.test_response([
+                                                { 'id' => '233b1d8c-e210-4c0e-9802-3e2e3638dc7a' },
+                                                { 'id' => '095c40b2-8c30-4e4d-8e10-7c80cc23371c' }
+                                            ])
+    orga.cloud.expect :auth_for_accounts, nil, [[LMC::Account::ROOT_ACCOUNT_UUID]]
+    orga.cloud.expect :get, child_response, [['cloud-service-auth', 'accounts', orga.id, 'children']]
     children = orga.children
     refute_empty children
     assert_instance_of LMC::Account, children.first
+    assert_equal child_response[0]['id'], children.first.id
+  end
+
+  def test_project_children
+    a = Fixtures.test_project
+    a.cloud.expect :auth_for_accounts, nil, [Object]
+    assert_empty a.children
   end
 
   def test_account_logs

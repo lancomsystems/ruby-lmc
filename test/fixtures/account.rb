@@ -5,9 +5,11 @@ module Fixtures
                      'name' => 'Some lame test project',
                      'type' => 'PROJECT'
   end
+
   def self.test_orga(cloud = Fixtures.mock_lmc)
     LMC::Account.new cloud, 'id' => '049019a7-ea1c-401e-8713-85cf15821e0e',
                      'name' => 'Some lame test orga',
                      'type' => 'ORGANIZATION'
   end
 end
+

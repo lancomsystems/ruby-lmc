@@ -125,7 +125,7 @@ module LMC
     def children
       @cloud.auth_for_accounts([ROOT_ACCOUNT_UUID])
       # Projects can not have children, return empty map immediately as optimization
-      if type != "PROJECT"
+      if type != 'PROJECT'
         response = @cloud.get ['cloud-service-auth', 'accounts', id, 'children']
         response.map { |child| Account.new @cloud, child }
       else

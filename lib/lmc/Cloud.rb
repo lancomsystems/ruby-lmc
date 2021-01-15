@@ -162,6 +162,7 @@ module LMC
           if response['code'] == 100
             raise LMC::OutdatedTermsOfUseException.new(response)
           end
+          raise e
         end
       end
     end

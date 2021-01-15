@@ -4,7 +4,7 @@ require 'test_helper'
 
 class LmcCloudTest < Minitest::Test
   def setup
-    @lmc = LMC::Cloud.new 'example.com', 'user', 'papa', false
+    @lmc = LMC::Cloud.new 'example.com', 'user', 'papa', nil, false
   end
 
   def test_that_it_can_get_account_objects

@@ -7,22 +7,24 @@ require 'restclient'
 module LMC
   class Cloud
     class << self
-      attr_accessor :cloud_host, :user, :password, :verbose, :debug, :verify_tls, :use_tls
+      attr_accessor :cloud_host, :user, :password, :code, :verbose, :debug, :verify_tls, :use_tls
       Cloud.use_tls = true
       Cloud.verify_tls = true
+      Cloud.code = nil
     end
 
     def self.instance(opts = { authorize: true })
-      @@inst ||= new(@cloud_host, @user, @password, opts[:authorize])
+      @@inst ||= new(@cloud_host, @user, @password, @code, opts[:authorize])
     end
 
     attr_reader :auth_ok, :cloud_host, :user, :password
 
-    def initialize(cloud_host, user, pass, auth = true)
+    def initialize(cloud_host, user, password, code = nil, auth = true)
       @auth_ok = false
       @cloud_host = cloud_host
       @user = user
-      @password = pass
+      @password = password
+      @code = code
       @verify_tls = Cloud.verify_tls
       @last_authorized_account_ids = nil
       @logger ||= ::LMC::Logger.new(STDOUT) if Cloud.debug
@@ -31,7 +33,7 @@ module LMC
       authorize if auth
     end
 
-    # hide password from dumps
+    # hide secret fields from being displayed in dumps
     def inspect
       "#<Cloud:#{object_id}, #{build_url}>"
     end
@@ -153,7 +155,12 @@ module LMC
       }
       if account_ids != @last_authorized_account_ids
         begin
-          reply = post(['cloud-service-auth', 'auth'], name: @user, password: @password, accountIds: account_ids, termsOfUse: tos)
+          reply = post(['cloud-service-auth', 'auth'],
+                       name: @user,
+                       password: @password,
+                       code: @code,
+                       accountIds: account_ids,
+                       termsOfUse: tos)
           @last_authorized_account_ids = account_ids
           @auth_token = reply
           @auth_ok = true

@@ -5,10 +5,23 @@ require 'restclient'
 
 module LMC
   SERVICELIST = ['cloud-service-auth',
-                 'cloud-service-devices',
-                 'cloud-service-monitoring',
+                 'cloud-service-backstage',
                  'cloud-service-config',
-                 'cloud-service-licenses']
+                 'cloud-service-devices',
+                 'cloud-service-devicetunnel',
+                 'cloud-service-dyndns',
+                 'cloud-service-fields',
+                 'cloud-service-geolocation',
+                 'cloud-service-hotspot',
+                 'cloud-service-jobs',
+                 'cloud-service-monitoring',
+                 'cloud-service-messaging',
+                 'cloud-service-notification',
+                 'cloud-service-licenses',
+                 'cloud-service-logging',
+                 'cloud-service-preferences',
+                 'cloud-service-uf-translator'
+  ]
 
   def self.useful
     true

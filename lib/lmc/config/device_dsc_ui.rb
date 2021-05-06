@@ -28,7 +28,7 @@ module LMC
       attr_reader :version_string, :sections
 
       def initialize(v_hash)
-        keys = v_hash.keys
+        keys = v_hash.to_h.keys
         raise('More than one version key contained in dscui.') if keys.length > 1
         @version_string = keys.first
         @sections = v_hash[@version_string].map { |section_wrapper| Section.new section_wrapper }
@@ -76,7 +76,7 @@ module LMC
       end
 
       def initialize(item_wrapper)
-        keys = item_wrapper.keys
+        keys = item_wrapper.to_h.keys
         raise('More than one key contained in item wrapper') if keys.length > 1
         @type = keys.first
         item = item_wrapper[@type]

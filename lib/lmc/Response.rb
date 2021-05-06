@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ostruct'
+require 'recursive-open-struct'
 module LMC
   class LMCResponse
     attr_reader :body, :code, :headers
@@ -13,12 +14,12 @@ module LMC
       if @body_object.class == Array
         @body = @body_object.map { |elem|
           if elem.is_a? Hash then
-            OpenStruct.new(elem)
+            RecursiveOpenStruct.new(elem, recurse_over_arrays: true)
           else
             elem
           end}
       elsif @body_object.class == Hash
-        @body = OpenStruct.new(@body_object)
+        @body = RecursiveOpenStruct.new(@body_object, recurse_over_arrays: true)
       elsif @body_object.class == TrueClass || @body_object.class == FalseClass
         @body = @body_object
       else

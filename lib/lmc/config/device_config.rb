@@ -54,7 +54,7 @@ module LMC
     def descriptive_confighash
       item_map = dscui.item_by_id_map
       confighash.map { |k, v|
-        [item_map[k].description, v]
+        [item_map[k.to_s].description, v]
       }.to_h
     end
 

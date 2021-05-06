@@ -34,6 +34,7 @@ module LMC
       action = AuthAction.new Cloud.instance
       action.type = 'PASSWORD_RESET'
       action.name = @email
+      action.data = nil
       action.post
     end
   end

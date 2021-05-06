@@ -10,6 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['erpel']
   spec.email         = ['philipp@copythat.de']
 
+  spec.required_ruby_version = '~> 2.0'
   spec.summary       = %q{Library for interacting with LMC cloud instances}
   spec.license       = 'BSD-3-Clause'
 

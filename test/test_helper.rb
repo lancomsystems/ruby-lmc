@@ -24,7 +24,10 @@ require 'cloud_instance_helper'
 require 'minitest/autorun'
 require 'minitest/reporters'
 
-MiniTest::Reporters.use!
+# Removing minitest to be compatible with IntelliJ Minitest
+unless ENV['RM_INFO']
+  MiniTest::Reporters.use!
+end
 
 Dir.glob(File.expand_path('../fixtures/*.rb', __FILE__)).each do |file|
   require file

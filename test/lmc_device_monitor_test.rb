@@ -4,8 +4,8 @@ require 'test_helper'
 
 class LmcDeviceMonitorTest < Minitest::Test
   def setup
-    @account = LMC::Account.new Fixtures.mock_lmc, 'id' => @account_id
-    @device = LMC::Device.new 'id' => @device_id,
+    @account = LMC::Account.new Fixtures.mock_lmc, 'id' => '76add372-7e6e-4903-9c00-9c90551fda82'
+    @device = LMC::Device.new 'id' => 'd4e10b9e-32ba-46c8-b102-f521ed927dd6',
                               'account' => @account,
                               'status' => {}
   end
@@ -25,7 +25,7 @@ class LmcDeviceMonitorTest < Minitest::Test
 
   def test_device_monitor_widgets
     @device.cloud.expect :get, Fixtures.test_response({}), [Array, {:widgetItemIds=>"df63db22-511a-4a10-a156-12ab0ace989d,6e2bb555-2b0d-4081-be6d-5b1608b06b49"}]
-    widgets = @device.get_monitor_widgets ['df63db22-511a-4a10-a156-12ab0ace989d', '6e2bb555-2b0d-4081-be6d-5b1608b06b49']
+    @device.get_monitor_widgets ['df63db22-511a-4a10-a156-12ab0ace989d', '6e2bb555-2b0d-4081-be6d-5b1608b06b49']
     assert_mock @device.cloud
   end
 end

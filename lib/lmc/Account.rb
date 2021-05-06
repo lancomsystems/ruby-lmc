@@ -133,11 +133,11 @@ module LMC
       end
     end
 
+    # This can only show the most recent page of logs so far
     def logs
-      # https://lmctest/cloud-service-logging/accounts/6392b234-b11c-498a-a077-a5f5b23c54a0/logs?lang=DE
       cloud = Cloud.instance
       cloud.auth_for_accounts [id]
-      cloud.get(['cloud-service-logging', 'accounts', id, 'logs?lang=DE']).body
+      cloud.get(['cloud-service-logging', 'accounts', id, 'logs', 'paginated?lang=DE']).body.logs
     end
 
     def sites

@@ -15,12 +15,12 @@ class Lmc2FATest < Minitest::Test
     cld = LMC::Cloud.allocate
     mock = Minitest::Mock.new
     mock.expect :call, nil, [
-        ["cloud-service-auth", "auth"],
-        {:name=>"admin",
-         :password=>"test1234",
-         :code=>nil,
-         :accountIds=>[],
-         :termsOfUse=>[]}
+        ['cloud-service-auth', 'auth'],
+        { :name => 'admin',
+         :password => 'test1234',
+         :code => nil,
+         :accountIds => [],
+         :termsOfUse => [] }
     ]
     cld.stub :post, mock do
       cld.send :initialize, 'localhost', 'admin', 'test1234'
@@ -32,12 +32,12 @@ class Lmc2FATest < Minitest::Test
     cld = LMC::Cloud.allocate
     mock = Minitest::Mock.new
     mock.expect :call, nil, [
-        ["cloud-service-auth", "auth"],
-        {:name=>"admin",
-         :password=>"test1234",
-         :code=>"123987",
-         :accountIds=>[],
-         :termsOfUse=>[]}
+        ['cloud-service-auth', 'auth'],
+        { :name => 'admin',
+         :password => 'test1234',
+         :code => '123987',
+         :accountIds => [],
+         :termsOfUse => [] }
     ]
     cld.stub :post, mock do
       cld.send :initialize, 'localhost', 'admin', 'test1234', '123987'

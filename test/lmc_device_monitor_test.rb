@@ -24,7 +24,7 @@ class LmcDeviceMonitorTest < Minitest::Test
   end
 
   def test_device_monitor_widgets
-    @device.cloud.expect :get, Fixtures.test_response({}), [Array, {:widgetItemIds=>"df63db22-511a-4a10-a156-12ab0ace989d,6e2bb555-2b0d-4081-be6d-5b1608b06b49"}]
+    @device.cloud.expect :get, Fixtures.test_response({}), [Array, { :widgetItemIds => 'df63db22-511a-4a10-a156-12ab0ace989d,6e2bb555-2b0d-4081-be6d-5b1608b06b49' }]
     @device.get_monitor_widgets ['df63db22-511a-4a10-a156-12ab0ace989d', '6e2bb555-2b0d-4081-be6d-5b1608b06b49']
     assert_mock @device.cloud
   end

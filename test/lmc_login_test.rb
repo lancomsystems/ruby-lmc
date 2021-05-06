@@ -18,3 +18,4 @@ class LmcLoginTest < Minitest::Test
     end
   end
 end
+

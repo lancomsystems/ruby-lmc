@@ -129,7 +129,7 @@ class LmcDeviceConfigTest < Minitest::Test
   end
 
   def test_configstate
-    @device.cloud.stub :get, Fixtures.test_response({@device.id => {configstate: 'ACTUAL'}}) do
+    @device.cloud.stub :get, Fixtures.test_response({ @device.id => { configstate: 'ACTUAL' } }) do
 
       config_state = @device.config_state
       assert_equal 'ACTUAL', config_state.configstate

@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 12.0'
   spec.add_development_dependency 'simplecov', '~> 0.15'
   spec.add_development_dependency 'pry-nav', '~> 0.2.4'
-  spec.add_development_dependency 'rubocop', '~> 0.58.1'
+  spec.add_development_dependency 'rubocop', '~> 1.14'
 
   spec.add_runtime_dependency 'json', '~> 2.3'
   spec.add_runtime_dependency 'rest-client', '~> 2.0'

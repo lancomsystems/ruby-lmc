@@ -73,13 +73,14 @@ module LMC
     def members
       ids = Cloud.instance.get ['cloud-service-auth', 'accounts', @id, 'members'], 'select' => 'id'
       puts ids.inspect if Cloud.debug
-      principals = ids.map do |principal_id|
-        response = Cloud.instance.get ['cloud-service-auth', 'accounts', @id, 'members', principal_id]
-        principal = response.body
-        puts principal.inspect if Cloud.debug
-        principal
+      # these are not actual membership objects
+      memberships = ids.map do |member_id|
+        response = Cloud.instance.get ['cloud-service-auth', 'accounts', @id, 'members', member_id]
+        memberships = response.body
+        puts memberships.inspect if Cloud.debug
+        memberships
       end
-      principals
+      memberships
     end
 
     def find_member_by_name(name)

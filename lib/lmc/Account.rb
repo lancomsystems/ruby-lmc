@@ -93,10 +93,12 @@ module LMC
       member
     end
 
+    #--
     # def update_member(principal_id, data)
     #  response = @cloud.post ["cloud-service-auth", "accounts", id, 'members', principal_id], data
     #  return response
     # end
+    #++
 
     def remove_membership(member_id)
       @cloud.delete ['cloud-service-auth', 'accounts', id, 'members', member_id]

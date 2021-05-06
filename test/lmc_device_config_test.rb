@@ -6,7 +6,7 @@ class LmcDeviceConfigTest < Minitest::Test
     @account_id = '4eec92c3-3dfb-4445-800b-b9e5822e963a'
     @device_id = '8d7ff9bb-1d4c-4374-acb1-a0680ab7d85a'
     @ticket_id = '83fb175c-6c5b-4aa9-93bb-8b405e633456'
-    @account = LMC::Account.new nil, 'id' => @account_id
+    @account = LMC::Account.new Fixtures.cloud, 'id' => @account_id
     @device = LMC::Device.new 'id' => @device_id,
                               'account' => @account,
                               'status' => {}
@@ -126,6 +126,16 @@ class LmcDeviceConfigTest < Minitest::Test
   def test_feature_id_string
     config = Fixtures.test_config
     assert_equal 'IDs:4,e,f,2b', config.lcf_feature_id_string
+  end
+
+  def test_configstate
+    @device.cloud.stub :get, Fixtures.test_response({@device.id => {configstate: 'ACTUAL'}}) do
+
+      config_state = @device.config_state
+      assert_equal 'ACTUAL', config_state.configstate
+    end
+    # second assertion to verify the caching works
+    assert_equal 'ACTUAL', @device.config_state.configstate
   end
 end
 

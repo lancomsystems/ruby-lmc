@@ -39,9 +39,5 @@ class LmcUserTest < Minitest::Test
     end
   end
 
-  def test_user_pw_reset
-    user = LMC::User.new('email' => @@credentials.email)
-    user.request_pw_reset
-  end
 end
 

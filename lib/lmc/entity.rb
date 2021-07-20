@@ -6,7 +6,7 @@ module LMC
       raise 'Missing argument' if term.nil?
       begin
         get_by_uuid term
-      rescue RestClient::BadRequest, URI::InvalidURIError
+      rescue RestClient::BadRequest, URI::InvalidURIError, LMC::ResponseException
         get_by_name term
       end
     end

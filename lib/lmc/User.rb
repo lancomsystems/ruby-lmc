@@ -22,12 +22,7 @@ module LMC
 
     def update(old_pw)
       cloud = Cloud.instance
-      begin
-        cloud.post ['cloud-service-auth', 'users', 'self', 'password'], 'password' => @password, 'verification' => old_pw
-      rescue RestClient::BadRequest => e
-        response_body = JSON.parse(e.response)
-        raise "#{e.message} - #{response_body['message']}"
-      end
+      cloud.post ['cloud-service-auth', 'users', 'self', 'password'], 'password' => @password, 'verification' => old_pw
     end
 
     def request_pw_reset

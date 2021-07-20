@@ -24,6 +24,31 @@ class LmcCloudTest < Minitest::Test
     end
   end
 
+  def test_unhandled_login_failures_are_raised
+    lmc = LMC::Cloud.allocate
+    fake_post = lambda { |_url, _body|
+      bodystring = '{
+    "timestamp": "2021-07-16T12:06:31.451Z",
+    "service": "auth",
+    "version": "9.24.4000",
+    "status": 400,
+    "path": "/userlogin",
+    "code": 199,
+    "details": {},
+    "message": "Authentication error",
+    "type": "DetailedProcessException"
+    }'
+      e = Fixtures.restclient_exception bodystring, 400
+      raise e
+    }
+    lmc.stub :post, fake_post do
+      assert_raises RuntimeError do
+        lmc.send :initialize, 'localhost', 'admin', 'test1234'
+      end
+    end
+
+  end
+
   def test_backstage_infos
     cloud = LMC::Cloud.instance
     infos = cloud.get_backstage_serviceinfos
@@ -56,7 +81,7 @@ class LmcCloudTest < Minitest::Test
       assert_equal args[:method], :delete
       assert_equal args[:url], 'https://example.com/foo'
       assert_equal args[:headers], { :content_type => 'application/json',
-                                    :params => { :ids => ['12', '23'] } }
+                                     :params => { :ids => ['12', '23'] } }
     end
     @lmc.stub :execute_request, fake_execute do
       @lmc.delete ['foo']
@@ -80,7 +105,8 @@ class LmcCloudTest < Minitest::Test
 
   def test_exception_logging
     fake_execute = lambda { |_r|
-      ex = RestClient::ExceptionWithResponse.new '{"message": "FAIL"}', 500
+      response = RestClient::Response.create '{"message": "FAIL"}', Net::HTTPResponse.new('', '200', ''), RestClient::Request.new({ :method => :post, url: 'http://localhost/' })
+      ex = RestClient::ExceptionWithResponse.new response, 500
       ex.message = 'buh'
       raise ex
     }
@@ -93,7 +119,7 @@ class LmcCloudTest < Minitest::Test
     LMC::Cloud.stub :debug, true do
       @lmc.stub :puts, fake_puts, String do
         RestClient::Request.stub :execute, fake_execute do
-          assert_raises RestClient::ExceptionWithResponse do
+          assert_raises LMC::ResponseException do
             @lmc.get []
           end
         end

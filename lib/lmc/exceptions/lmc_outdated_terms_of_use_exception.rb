@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 module LMC
-  class OutdatedTermsOfUseException < Exception
-    def initialize(response = {})
-      @response = response
-    end
+  class OutdatedTermsOfUseException < ResponseException
 
     def response
       r = "Terms of use must be accepted before using this LMC instance:\n"

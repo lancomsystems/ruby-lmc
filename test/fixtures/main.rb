@@ -40,6 +40,7 @@ module Fixtures
     device.config
   end
 
+  # A non mock alternative can be found in lmc_tos_test.rb
   def self.test_restclient_response(body_json_string, code = 200, headers = [])
     mock = Minitest::Mock.new
     mock.expect :bytesize, body_json_string.bytesize

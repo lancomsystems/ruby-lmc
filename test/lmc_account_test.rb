@@ -49,9 +49,10 @@ class LmcAccountTest < ::Minitest::Test
   end
 
   def test_getting_account_by_invalid_uuid
-    assert_raises RestClient::Forbidden do
+    ex = assert_raises RuntimeError do
       LMC::Account.get_by_uuid_or_name '00000000-0000-0000-96BD-5F97BE22D5F6'
     end
+    assert_equal 'Did not find account', ex.message
   end
 
   def test_getting_account_by_invalid_name

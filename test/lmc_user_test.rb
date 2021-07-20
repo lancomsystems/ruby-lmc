@@ -2,6 +2,7 @@
 
 require 'test_helper'
 class LmcUserTest < Minitest::Test
+  LMC::Cloud.debug = true
   @@credentials = LMC::Tests::CredentialsHelper.credentials.pwchange
   @@changecloud = LMC::Cloud.new(@@credentials.host, @@credentials.email, @@credentials.password)
   @@currentmillis = (Time.now.to_f * 1000).floor
@@ -13,8 +14,8 @@ class LmcUserTest < Minitest::Test
     LMC::Cloud.stub :instance, @@changecloud do
       begin
         user.update @@newpass
-      rescue RuntimeError => e
-        raise e unless e.message == '400 Bad Request - Current password does not match'
+      rescue LMC::ResponseException => e
+        raise e unless e.response.body.code == 107 # -> password is invalid
       end
     end
   end
@@ -32,7 +33,7 @@ class LmcUserTest < Minitest::Test
     user = LMC::User.new('email' => @@credentials.email, 'password' => 'short')
     assert_equal @@credentials.email, user.email
     LMC::Cloud.stub :instance, @@changecloud do
-      ex = assert_raises RuntimeError do
+      ex = assert_raises Exception do
         user.update @@credentials.password
       end
       assert_match(/400 Bad Request.*/, ex.message)

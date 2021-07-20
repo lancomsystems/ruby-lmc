@@ -30,7 +30,7 @@ module LMC
       @logger ||= ::LMC::Logger.new(STDOUT) if Cloud.debug
       @logger.cloud = self if Cloud.debug
       RestClient.log = @logger if Cloud.debug
-      authorize if auth
+      login if auth
     end
 
     # hide secret fields from being displayed in dumps
@@ -74,9 +74,9 @@ module LMC
       prepared_headers = headers
       prepared_headers[:params] = params
       args = {
-          :method => :get,
-          :url => build_url(path),
-          :headers => prepared_headers
+        :method => :get,
+        :url => build_url(path),
+        :headers => prepared_headers
       }
       execute_request args
     end
@@ -85,22 +85,22 @@ module LMC
       prepared_headers = headers
       prepared_headers[:params] = params
       args = {
-          :method => :put,
-          :url => build_url(path),
-          :payload => body_object.to_json,
-          :headers => prepared_headers
+        :method => :put,
+        :url => build_url(path),
+        :payload => body_object.to_json,
+        :headers => prepared_headers
       }
       execute_request args
     end
 
-    def post(path, body_object, params=nil )
+    def post(path, body_object, params = nil)
       prepared_headers = headers
       prepared_headers[:params] = params
       args = {
-          :method => :post,
-          :url => build_url(path),
-          :payload => body_object.to_json,
-          :headers => prepared_headers
+        :method => :post,
+        :url => build_url(path),
+        :payload => body_object.to_json,
+        :headers => prepared_headers
       }
       execute_request args
     end
@@ -109,9 +109,9 @@ module LMC
       prepared_headers = headers
       prepared_headers[:params] = params
       args = {
-          :method => :delete,
-          :url => build_url(path),
-          :headers => prepared_headers
+        :method => :delete,
+        :url => build_url(path),
+        :headers => prepared_headers
       }
       execute_request args
     end
@@ -145,7 +145,7 @@ module LMC
 
     private
 
-    def authorize(accounts = [], tos = [])
+    def authorize(accounts = [])
       account_ids = accounts.map { |a|
         if a.respond_to? :id
           a.id
@@ -160,17 +160,32 @@ module LMC
                        password: @password,
                        code: @code,
                        accountIds: account_ids,
-                       termsOfUse: tos)
+          )
           @last_authorized_account_ids = account_ids
           @auth_token = reply
           @auth_ok = true
-        rescue ::RestClient::ExceptionWithResponse => e
-          response = JSON.parse(e.response.body)
-          if response['code'] == 100
-            raise LMC::OutdatedTermsOfUseException.new(response)
-          end
-          raise e
         end
+      end
+    end
+
+    def login(tos = [])
+      begin
+        reply = post(['cloud-service-auth', 'userlogin'],
+                     name: @user,
+                     password: @password,
+                     code: @code,
+                     termsOfUse: tos)
+        @auth_token = reply
+        @auth_ok = true
+      rescue ::RestClient::ExceptionWithResponse => e
+        response = JSON.parse(e.response.body)
+        if response['code'] == 104
+          raise LMC::MissingCodeException.new e
+        end
+        if response['code'] == 100
+          raise LMC::OutdatedTermsOfUseException.new e
+        end
+        raise e
       end
     end
 
@@ -206,7 +221,7 @@ module LMC
           puts 'EX.response: ' + e.response.to_s
           puts JSON.parse(e.response)['message']
         end
-        raise e
+        raise ResponseException.new e
       end
     end
   end

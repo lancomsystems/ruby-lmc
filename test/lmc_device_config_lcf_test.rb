@@ -41,7 +41,6 @@ class LmcDeviceConfigLCFTest < Minitest::Test
         assert_equal expected_lcf, config.lcf
       end
     end
-
   end
 
   def test_error

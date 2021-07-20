@@ -13,26 +13,28 @@ end
 
 RuboCop::RakeTask.new(:autocop) do |t|
   autofix = [
+      'Gemspec/OrderedDependencies',
+      'Layout/EmptyLineBetweenDefs',
       'Layout/EmptyLines',
       'Layout/EmptyLinesAroundClassBody',
+      'Layout/EmptyLinesAroundMethodBody',
       'Layout/EmptyLinesAroundModuleBody',
-      'Layout/EmptyLineBetweenDefs',
       'Layout/LeadingCommentSpace',
+      'Layout/SpaceAfterComma',
       'Layout/SpaceAroundOperators',
       'Layout/SpaceInsideBlockBraces',
       'Layout/SpaceInsideHashLiteralBraces',
       'Layout/TrailingEmptyLines',
+      'Lint/RedundantStringCoercion',
+      'Lint/UnusedBlockArgument',
       'Style/CommentAnnotation',
       'Style/FrozenStringLiteralComment',
       'Style/MethodDefParentheses',
-      'Style/RedundantSelf',
       'Style/RedundantReturn',
-      'Style/StringLiterals',
-      'Style/StringLiteralsInInterpolation',
+      'Style/RedundantSelf',
       'Style/StabbyLambdaParentheses',
-      'Gemspec/OrderedDependencies',
-      'Lint/RedundantStringCoercion',
-      'Lint/UnusedBlockArgument'
+      'Style/StringLiterals',
+      'Style/StringLiteralsInInterpolation'
   ]
   t.options = ['--only', autofix.join(','), '--auto-correct', 'lib', 'test', 'Rakefile', 'lmc.gemspec']
 end

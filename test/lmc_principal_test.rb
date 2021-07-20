@@ -31,7 +31,6 @@ class LmcPrincipalTest < Minitest::Test
         p.save
       end
     end
-
   end
 
   def test_to_s

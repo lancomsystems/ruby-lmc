@@ -20,7 +20,6 @@ class LmcDeviceMonitorTest < Minitest::Test
     r.scalar 'datapoint', 144, 'MINUTE10'
     r.row 'dunno', 12, 'DAY'
     assert_mock mock_lmc
-
   end
 
   def test_device_monitor_widgets

@@ -46,7 +46,6 @@ class LmcCloudTest < Minitest::Test
         lmc.send :initialize, 'localhost', 'admin', 'test1234'
       end
     end
-
   end
 
   def test_backstage_infos

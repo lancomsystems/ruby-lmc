@@ -21,7 +21,6 @@ class LmcDeviceTest < Minitest::Test
     device.stub :status, 'hwMask' => 17 do
       assert_equal '0x00000011', device.hwmask_hex
     end
-
   end
 end
 

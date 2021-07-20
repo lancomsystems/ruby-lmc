@@ -14,7 +14,6 @@ module LMC
       @id = data['id']
       @name = data['name']
       @subnet_group_id = data['subnetGroupId']
-
     end
 
     def to_s

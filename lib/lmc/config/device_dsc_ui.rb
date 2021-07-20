@@ -32,7 +32,6 @@ module LMC
         raise('More than one version key contained in dscui.') if keys.length > 1
         @version_string = keys.first
         @sections = v_hash[@version_string].map { |section_wrapper| Section.new section_wrapper }
-
       end
 
       def items
@@ -54,7 +53,6 @@ module LMC
         @groups = members.map { |group_wrapper|
           Group.new group_wrapper unless group_wrapper['group'].nil?
         }.compact
-
       end
     end
 

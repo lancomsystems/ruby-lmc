@@ -2,7 +2,6 @@
 
 module LMC
   class OutdatedTermsOfUseException < ResponseException
-
     def response
       r = "Terms of use must be accepted before using this LMC instance:\n"
       missing.each do |tos|

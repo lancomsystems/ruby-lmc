@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 module Fixtures
   def self.restclient_exception(bodystring, http_status_code = '200')
@@ -7,6 +7,7 @@ module Fixtures
     rest_client_request = RestClient::Request.new({ :method => :post, url: 'http://localhost/' })
     e = ::RestClient::ExceptionWithResponse.new
     e.response = RestClient::Response.create bodystring, http_response , rest_client_request
-    return e
+    e
   end
 end
+

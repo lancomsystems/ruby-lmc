@@ -5,10 +5,10 @@ class LmcTosTest < Minitest::Test
   @@fake_post = lambda { |url, body|
     e = ::RestClient::ExceptionWithResponse.new
     bodystring = '{"code":100,"service":"auth","message":"Expired terms-of-use","timestamp":"2018-06-29T17:54:59.095+02:00","path":"/auth","details":{"missing":[{"name":"organization","acceptance":"2018-06-25","updated":true}]},"type":"de.lcs.lmc.service.auth.exception.DetailedProcessException"}'
-    #e.response = OpenStruct.new('body' => '{"code":100,"service":"auth","message":"Expired terms-of-use","timestamp":"2018-06-29T17:54:59.095+02:00","path":"/auth","details":{"missing":[{"name":"organization","acceptance":"2018-06-25","updated":true}]},"type":"de.lcs.lmc.service.auth.exception.DetailedProcessException"}')
-    #e.response = Fixtures.test_restclient_response '{"code":100,"service":"auth","message":"Expired terms-of-use","timestamp":"2018-06-29T17:54:59.095+02:00","path":"/auth","details":{"missing":[{"name":"organization","acceptance":"2018-06-25","updated":true}]},"type":"de.lcs.lmc.service.auth.exception.DetailedProcessException"}', 403
+    # e.response = OpenStruct.new('body' => '{"code":100,"service":"auth","message":"Expired terms-of-use","timestamp":"2018-06-29T17:54:59.095+02:00","path":"/auth","details":{"missing":[{"name":"organization","acceptance":"2018-06-25","updated":true}]},"type":"de.lcs.lmc.service.auth.exception.DetailedProcessException"}')
+    # e.response = Fixtures.test_restclient_response '{"code":100,"service":"auth","message":"Expired terms-of-use","timestamp":"2018-06-29T17:54:59.095+02:00","path":"/auth","details":{"missing":[{"name":"organization","acceptance":"2018-06-25","updated":true}]},"type":"de.lcs.lmc.service.auth.exception.DetailedProcessException"}', 403
     # TODO: This hack should go into Fixtures if it turns out useful
-    rcresponse = RestClient::Response.create bodystring, Net::HTTPResponse.new('', '200', ''), RestClient::Request.new({:method => :post, url: 'http://localhost/'})
+    rcresponse = RestClient::Response.create bodystring, Net::HTTPResponse.new('', '200', ''), RestClient::Request.new({ :method => :post, url: 'http://localhost/' })
     e.response = rcresponse
     raise e
   }

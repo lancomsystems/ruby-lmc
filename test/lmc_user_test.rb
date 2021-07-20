@@ -39,6 +39,5 @@ class LmcUserTest < Minitest::Test
       assert_match(/400 Bad Request.*/, ex.message)
     end
   end
-
 end
 

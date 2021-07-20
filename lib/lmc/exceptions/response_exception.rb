@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module LMC
   class ResponseException < RuntimeError
     attr_reader :response
@@ -14,3 +15,4 @@ module LMC
     end
   end
 end
+

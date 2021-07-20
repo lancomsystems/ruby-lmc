@@ -12,3 +12,4 @@ class LmcUserTest < Minitest::Test
     user.request_pw_reset
   end
 end
+

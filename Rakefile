@@ -30,6 +30,9 @@ RuboCop::RakeTask.new(:autocop) do |t|
       'Style/StringLiterals',
       'Style/StringLiteralsInInterpolation',
       'Style/StabbyLambdaParentheses',
+      'Gemspec/OrderedDependencies',
+      'Lint/RedundantStringCoercion',
+      'Lint/UnusedBlockArgument'
   ]
   t.options = ['--only', autofix.join(','), '--auto-correct', 'lib', 'test', 'Rakefile', 'lmc.gemspec']
 end

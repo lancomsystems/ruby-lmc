@@ -11,7 +11,7 @@ class LmcAuthorityTest < ::Minitest::Test
   end
 
   def test_authority_rights
-    fake_get = lambda { |r|
+    fake_get = lambda { |_r|
       return OpenStruct.new(:body => 'FAAKE')
     }
     LMC::Cloud.instance.stub :get, fake_get do

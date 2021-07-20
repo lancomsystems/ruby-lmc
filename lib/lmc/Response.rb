@@ -52,7 +52,7 @@ module LMC
     end
 
     def to_s
-      "Response: Code: #{@code}, Body: #{@body_object.to_s}"
+      "Response: Code: #{@code}, Body: #{@body_object}"
     end
 
     def empty?

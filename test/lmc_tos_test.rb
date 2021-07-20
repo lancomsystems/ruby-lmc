@@ -2,7 +2,7 @@
 
 require 'test_helper'
 class LmcTosTest < Minitest::Test
-  @@fake_post = lambda { |url, body|
+  @@fake_post = lambda { |_url, _body|
     e = ::RestClient::ExceptionWithResponse.new
     bodystring = '{"code":100,"service":"auth","message":"Expired terms-of-use","timestamp":"2018-06-29T17:54:59.095+02:00","path":"/auth","details":{"missing":[{"name":"organization","acceptance":"2018-06-25","updated":true}]},"type":"de.lcs.lmc.service.auth.exception.DetailedProcessException"}'
     # e.response = OpenStruct.new('body' => '{"code":100,"service":"auth","message":"Expired terms-of-use","timestamp":"2018-06-29T17:54:59.095+02:00","path":"/auth","details":{"missing":[{"name":"organization","acceptance":"2018-06-25","updated":true}]},"type":"de.lcs.lmc.service.auth.exception.DetailedProcessException"}')

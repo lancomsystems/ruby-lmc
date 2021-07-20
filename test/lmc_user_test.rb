@@ -6,7 +6,7 @@ class LmcUserTest < Minitest::Test
   @@credentials = LMC::Tests::CredentialsHelper.credentials.pwchange
   @@changecloud = LMC::Cloud.new(@@credentials.host, @@credentials.email, @@credentials.password)
   @@currentmillis = (Time.now.to_f * 1000).floor
-  @@newpass = "Password-#{@@currentmillis.to_s}"
+  @@newpass = "Password-#{@@currentmillis}"
 
   def teardown
     user = LMC::User.new( 'email' => @@credentials.email,

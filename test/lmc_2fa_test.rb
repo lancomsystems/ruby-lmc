@@ -23,7 +23,7 @@ class Lmc2FATest < Minitest::Test
   end
 
   def test_2fa_code_missing_exception
-    fake_post = lambda { |url, body|
+    fake_post = lambda { |_url, _body|
       bodystring = '{
     "timestamp": "2021-07-16T12:06:31.451Z",
     "service": "auth",

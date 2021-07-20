@@ -62,7 +62,7 @@ class LmcCloudTest < Minitest::Test
   end
 
   def test_put
-    fake_execute = lambda { |r|
+    fake_execute = lambda { |_r|
       return OpenStruct.new(:bytesize => 0)
     }
     c = LMC::Cloud.instance

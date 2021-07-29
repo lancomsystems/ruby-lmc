@@ -127,6 +127,7 @@ module LMC
     # @return [String]
     def lcf_feature_id_string
       hex_features = current_device_type.features.map { |feature| feature.to_s 16 }
+      hex_features << '80000800' #Magic feature to cause lanconfig to show the password
       "IDs:#{hex_features.join(',')}"
     end
 

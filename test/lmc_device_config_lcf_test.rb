@@ -5,7 +5,8 @@
 require 'test_helper'
 class LmcDeviceConfigLCFTest < Minitest::Test
   def test_integration
-    items = JSON.parse '{
+    config_ui_response = Fixtures.test_response_json'
+    { "items": {
         "1.2.1": "l-1302",
         "1.2.9.27": {
             "colIds": [
@@ -21,10 +22,11 @@ class LmcDeviceConfigLCFTest < Minitest::Test
                 ]
             ]
         }
-    }'
+    }
+}'
 
     expected_lcf = "(LMC Configuration of 'Fixture AP' at 1970-01-01 01:00:00 +0100 via ruby-lmc #{LMC::VERSION})
-(10.20.0448 / 13.04.2019) (0x0000c010,IDs:4,e,f,2b;0x0c000002)
+(10.20.0448 / 13.04.2019) (0x0000c010,IDs:4,e,f,2b,80000800;0x0c000002)
 [LANCOM L-1302acn dual Wireless] v10.30.0232
 [TYPE: LCF; VERSION: 1.00; HASHTYPE: none;]
 1.2.1 = l-1302
@@ -35,8 +37,9 @@ class LmcDeviceConfigLCFTest < Minitest::Test
 [END: LCF;]
 "
 
-    config = Fixtures.test_config
-    config.stub :items, items do
+    config = Fixtures.test_config [
+                                    [:get, config_ui_response, [Array, Hash]]
+                                  ]
       Time.stub :now, Time.at(0) do
         assert_equal expected_lcf, config.lcf
       end

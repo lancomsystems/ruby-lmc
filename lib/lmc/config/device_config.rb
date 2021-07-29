@@ -75,12 +75,12 @@ module LMC
 
       result = ''
       result += lcf_header
-      items.each do |key, value|
+      items.to_h.each do |key, value|
         if value.instance_of? String
           result += "#{key} = #{value}\n"
         elsif value.instance_of? Hash
-          rows = value['rows']
-          col_ids = value['colIds']
+          rows = value[:rows]
+          col_ids = value[:colIds]
           if rows.length > 0
             result += "<#{key}>\n"
             rows.each_with_index { |row, index|
@@ -127,7 +127,7 @@ module LMC
     # @return [String]
     def lcf_feature_id_string
       hex_features = current_device_type.features.map { |feature| feature.to_s 16 }
-      hex_features << '80000800' #Magic feature to cause lanconfig to show the password
+      hex_features << '80000800' # Magic feature to cause lanconfig to show the password
       "IDs:#{hex_features.join(',')}"
     end
 
@@ -162,7 +162,8 @@ module LMC
     end
 
     def fetch_result
-      response_or_ticket = @cloud.get(url_configbuilder).body
+      # TODO: Make parameters settable
+      response_or_ticket = @cloud.get(url_configbuilder, { includePasswords: 'TRUE', includeSmartApps: 'FALSE' }).body
       if response_or_ticket.respond_to? 'ticketId'
         @ticket_id = response_or_ticket.ticketId
         redeem_ticket 5

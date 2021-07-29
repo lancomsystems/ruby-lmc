@@ -32,10 +32,11 @@ module Fixtures
     test_response_json json
   end
 
-  def self.test_config
-    mock_lmc = Fixtures.mock_lmc [
-                                     [:get, Fixtures.configdevice_state_response, [Array, Hash]]
-                                 ]
+  def self.test_config(lmc_expects = [])
+    lmc_expects = [
+      [:get, Fixtures.configdevice_state_response, [Array, Hash]]
+    ] + lmc_expects
+    mock_lmc = Fixtures.mock_lmc lmc_expects
     device = Fixtures.test_device Fixtures.test_account mock_lmc
     device.config
   end

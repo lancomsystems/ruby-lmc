@@ -43,7 +43,6 @@ class LmcDeviceConfigLCFTest < Minitest::Test
       Time.stub :now, Time.at(0) do
         assert_equal expected_lcf, config.lcf
       end
-    end
   end
 
   def test_error

@@ -20,7 +20,7 @@ class LmcDeviceConfigTest < Minitest::Test
     @config_response = LMC::LMCResponse.new OpenStruct.new body: config_body, code: 200, headers: nil,
                                                            bytesize: config_body.bytesize
     @config_request_args = [['cloud-service-config', 'configbuilder', 'accounts',
-                             @account_id, 'devices', @device_id, 'ui']]
+                             @account_id, 'devices', @device_id, 'ui'], Hash]
 
     @dscui_request_args = [['cloud-service-config', 'configdevice', 'accounts', '4eec92c3-3dfb-4445-800b-b9e5822e963a',
                             'devices', '8d7ff9bb-1d4c-4374-acb1-a0680ab7d85a', 'dscui']]
@@ -125,7 +125,7 @@ class LmcDeviceConfigTest < Minitest::Test
 
   def test_feature_id_string
     config = Fixtures.test_config
-    assert_equal 'IDs:4,e,f,2b', config.lcf_feature_id_string
+    assert_equal 'IDs:4,e,f,2b,80000800', config.lcf_feature_id_string
   end
 
   def test_configstate

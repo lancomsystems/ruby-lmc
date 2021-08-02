@@ -92,7 +92,7 @@ module LMC
           raise 'Unexpected value in config items: ' + value.class.to_s
         end
       end
-      result += lcf_footer
+      result + lcf_footer
     end
 
     def current_device_type

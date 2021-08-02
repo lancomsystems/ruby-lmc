@@ -19,7 +19,7 @@ class LmcAccountInviteTest < Minitest::Test
   def test_authorities
     refute_nil @orga.authorities
     refute_empty @project.authorities
-    assert_raises RuntimeError do
+    assert_raises LMC::ResponseException do
       LMC::Account.new(LMC::Cloud.instance, id: 'invalid_id').authorities
     end
   end

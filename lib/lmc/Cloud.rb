@@ -177,13 +177,12 @@ module LMC
                      termsOfUse: tos)
         @auth_token = reply
         @auth_ok = true
-      rescue ::RestClient::ExceptionWithResponse => e
-        response = JSON.parse(e.response.body)
-        if response['code'] == 104
-          raise LMC::MissingCodeException.new e
+      rescue ResponseException => e
+        if e.response['code'] == 104
+          raise LMC::MissingCodeException.new e.response
         end
-        if response['code'] == 100
-          raise LMC::OutdatedTermsOfUseException.new e
+        if e.response['code'] == 100
+          raise LMC::OutdatedTermsOfUseException.new e.response
         end
         raise e
       end
@@ -221,7 +220,7 @@ module LMC
           puts 'EX.response: ' + e.response.to_s
           puts JSON.parse(e.response)['message']
         end
-        raise ResponseException.new e
+        raise ResponseException.new e.response
       end
     end
   end

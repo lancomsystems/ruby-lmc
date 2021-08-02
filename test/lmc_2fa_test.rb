@@ -23,7 +23,7 @@ class Lmc2FATest < Minitest::Test
   end
 
   def test_2fa_code_missing_exception
-    fake_post = lambda { |_url, _body|
+    fake_method = lambda { |_args|
       bodystring = '{
     "timestamp": "2021-07-16T12:06:31.451Z",
     "service": "auth",
@@ -36,9 +36,9 @@ class Lmc2FATest < Minitest::Test
     "type": "DetailedProcessException"
 }'
       e = Fixtures.restclient_exception bodystring, 400
-      raise e
+      raise LMC::ResponseException.new(e.response), cause: e
     }
-    @lmc.stub :post, fake_post do
+    @lmc.stub :execute_request, fake_method do
       assert_raises LMC::MissingCodeException do
         @lmc.send :initialize, 'localhost', 'admin', 'test1234'
       end

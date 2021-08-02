@@ -5,9 +5,13 @@ module LMC
 
     # Initialize a ResponseException.
     #
-    # @param [RestClient::ExceptionWithResponse] restclientException wrapped exception
-    def initialize(restclientException = {})
-      @response = LMCResponse.new restclientException.response
+    # @param [Object] response restclient Response
+    def initialize(response)
+      if response.is_a? LMCResponse
+        @response = response
+      else
+        @response = LMCResponse.new response
+      end
     end
 
     def message
